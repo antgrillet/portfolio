@@ -1,103 +1,394 @@
-import Image from "next/image";
+"use client";
+
+import { motion } from "motion/react";
+import { Navigation } from "@/components/Navigation";
+import { ProjectCard } from "@/components/ProjectCard";
+import { TechBadge } from "@/components/TechBadge";
+import { Project } from "@/data/projects";
+import { useEffect, useState } from "react";
+import {
+	Github,
+	Linkedin,
+	Mail,
+	ChevronDown,
+	Code2,
+	Database,
+	Cloud,
+	Palette,
+	Loader2,
+} from "lucide-react";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+	const [projects, setProjects] = useState<Project[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+	useEffect(() => {
+		const fetchProjects = async () => {
+			try {
+				const response = await fetch("/api/projects");
+				if (!response.ok) {
+					throw new Error("Erreur lors du chargement des projets");
+				}
+				const data = await response.json();
+				setProjects(data.projects);
+			} catch (err) {
+				setError(err instanceof Error ? err.message : "Erreur inconnue");
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		fetchProjects();
+	}, []);
+
+	const techStack = {
+		frontend: [
+			"React",
+			"Next.js",
+			"TypeScript",
+			"Tailwind CSS",
+			"Framer Motion",
+		],
+		backend: ["Node.js", "Python"],
+		database: ["PostgreSQL", "Prisma"],
+		cloud: ["Vercel", "CI/CD", "GitHub Actions"],
+	};
+
+	const scrollToProjects = () => {
+		document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+	};
+
+	return (
+		<>
+			<Navigation />
+
+			{/* Hero Section */}
+			<section
+				id="hero"
+				className="min-h-screen flex items-center justify-center relative overflow-hidden"
+			>
+				<div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 dark:from-zinc-950 dark:via-blue-950 dark:to-purple-950" />
+
+				<motion.div
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 0.4 }}
+					transition={{ duration: 2 }}
+					className="absolute inset-0"
+				>
+					<div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-blue-400 to-cyan-400 dark:from-blue-600 dark:to-cyan-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-70 animate-blob" />
+					<div className="absolute top-40 right-20 w-96 h-96 bg-gradient-to-r from-purple-400 to-pink-400 dark:from-purple-600 dark:to-pink-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-70 animate-blob animation-delay-2000" />
+					<div className="absolute -bottom-8 left-40 w-96 h-96 bg-gradient-to-r from-pink-400 to-rose-400 dark:from-pink-600 dark:to-rose-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-70 animate-blob animation-delay-4000" />
+					<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-indigo-400 to-blue-400 dark:from-indigo-600 dark:to-blue-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-30 animate-blob animation-delay-3000" />
+				</motion.div>
+
+				<div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-center">
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.8 }}
+					>
+						<h1 className="text-5xl md:text-7xl font-bold mb-6">
+							<span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+								Antonin Grillet
+							</span>
+						</h1>
+
+						<motion.p
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							transition={{ delay: 0.2, duration: 0.8 }}
+							className="text-2xl md:text-3xl text-zinc-700 dark:text-zinc-300 mb-8"
+						>
+							Développeur Web Full-Stack
+						</motion.p>
+
+						<motion.p
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							transition={{ delay: 0.4, duration: 0.8 }}
+							className="text-lg text-zinc-600 dark:text-zinc-400 mb-12 max-w-2xl mx-auto"
+						>
+							Je crée des applications web modernes et performantes, déployées
+							sur Vercel. Spécialisé en React, Next.js et TypeScript avec une
+							passion pour les interfaces élégantes.
+						</motion.p>
+
+						<motion.div
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							transition={{ delay: 0.6, duration: 0.8 }}
+							className="flex gap-4 justify-center mb-12"
+						>
+							<a
+								href="https://github.com/antoningrillet"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="p-3 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
+							>
+								<Github className="h-6 w-6" />
+							</a>
+							<a
+								href="https://linkedin.com/in/antoningrillet"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="p-3 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
+							>
+								<Linkedin className="h-6 w-6" />
+							</a>
+							<a
+								href="mailto:contact@antoningrillet.dev"
+								className="p-3 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
+							>
+								<Mail className="h-6 w-6" />
+							</a>
+						</motion.div>
+
+						<motion.button
+							onClick={scrollToProjects}
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							transition={{ delay: 0.8, duration: 0.8 }}
+							className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-medium hover:scale-105 transition-transform"
+						>
+							Voir mes projets
+							<ChevronDown className="h-5 w-5 animate-bounce" />
+						</motion.button>
+					</motion.div>
+				</div>
+			</section>
+
+			{/* Projects Section */}
+			<section id="projects" className="py-20 relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-zinc-950 dark:via-blue-950/20 dark:to-purple-950/20">
+				<div className="absolute inset-0 bg-grid-slate-100 dark:bg-grid-slate-800 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] dark:[mask-image:linear-gradient(0deg,rgba(0,0,0,1),rgba(0,0,0,0.6))]" style={{backgroundSize: '30px 30px'}} />
+				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.6 }}
+						viewport={{ once: true }}
+						className="text-center mb-12"
+					>
+						<h2 className="text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
+							Projets Hébergés sur Vercel
+						</h2>
+						<p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+							Une sélection de mes projets récents, tous déployés et accessibles
+							en ligne sur Vercel.
+						</p>
+					</motion.div>
+
+					{loading ? (
+						<div className="flex items-center justify-center py-12">
+							<Loader2 className="h-8 w-8 animate-spin text-zinc-600 dark:text-zinc-400" />
+							<span className="ml-3 text-zinc-600 dark:text-zinc-400">
+								Chargement des projets...
+							</span>
+						</div>
+					) : error ? (
+						<div className="text-center py-12">
+							<p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
+							<button
+								onClick={() => window.location.reload()}
+								className="px-4 py-2 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:scale-105 transition-transform"
+							>
+								Réessayer
+							</button>
+						</div>
+					) : projects.length === 0 ? (
+						<div className="text-center py-12">
+							<p className="text-zinc-600 dark:text-zinc-400">
+								Aucun projet disponible pour le moment.
+							</p>
+						</div>
+					) : (
+						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+							{projects.map((project, index) => (
+								<motion.div
+									key={project.id}
+									initial={{ opacity: 0, y: 20 }}
+									whileInView={{ opacity: 1, y: 0 }}
+									transition={{ duration: 0.5, delay: index * 0.1 }}
+									viewport={{ once: true }}
+								>
+									<ProjectCard {...project} />
+								</motion.div>
+							))}
+						</div>
+					)}
+				</div>
+			</section>
+
+			{/* Tech Stack Section */}
+			<section id="tech" className="py-20 relative overflow-hidden bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 dark:from-zinc-900 dark:via-purple-950/20 dark:to-pink-950/20">
+				<motion.div
+					initial={{ opacity: 0 }}
+					whileInView={{ opacity: 0.3 }}
+					transition={{ duration: 1 }}
+					viewport={{ once: true }}
+					className="absolute inset-0"
+				>
+					<div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-300 dark:bg-purple-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-20 animate-blob" />
+					<div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-300 dark:bg-pink-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-20 animate-blob animation-delay-2000" />
+				</motion.div>
+				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.6 }}
+						viewport={{ once: true }}
+						className="text-center mb-12"
+					>
+						<h2 className="text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
+							Technologies & Stack
+						</h2>
+						<p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+							Les technologies que j&apos;utilise pour créer des applications
+							web modernes et performantes.
+						</p>
+					</motion.div>
+
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+						<motion.div
+							initial={{ opacity: 0, x: -20 }}
+							whileInView={{ opacity: 1, x: 0 }}
+							transition={{ duration: 0.5 }}
+							viewport={{ once: true }}
+							className="space-y-4"
+						>
+							<div className="flex items-center gap-2 mb-4">
+								<Code2 className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+								<h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+									Frontend
+								</h3>
+							</div>
+							<div className="flex flex-wrap gap-2">
+								{techStack.frontend.map((tech) => (
+									<TechBadge key={tech} name={tech} />
+								))}
+							</div>
+						</motion.div>
+
+						<motion.div
+							initial={{ opacity: 0, x: -20 }}
+							whileInView={{ opacity: 1, x: 0 }}
+							transition={{ duration: 0.5, delay: 0.1 }}
+							viewport={{ once: true }}
+							className="space-y-4"
+						>
+							<div className="flex items-center gap-2 mb-4">
+								<Database className="h-6 w-6 text-green-600 dark:text-green-400" />
+								<h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+									Backend
+								</h3>
+							</div>
+							<div className="flex flex-wrap gap-2">
+								{techStack.backend.map((tech) => (
+									<TechBadge key={tech} name={tech} />
+								))}
+							</div>
+						</motion.div>
+
+						<motion.div
+							initial={{ opacity: 0, x: -20 }}
+							whileInView={{ opacity: 1, x: 0 }}
+							transition={{ duration: 0.5, delay: 0.2 }}
+							viewport={{ once: true }}
+							className="space-y-4"
+						>
+							<div className="flex items-center gap-2 mb-4">
+								<Palette className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+								<h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+									Database
+								</h3>
+							</div>
+							<div className="flex flex-wrap gap-2">
+								{techStack.database.map((tech) => (
+									<TechBadge key={tech} name={tech} />
+								))}
+							</div>
+						</motion.div>
+
+						<motion.div
+							initial={{ opacity: 0, x: -20 }}
+							whileInView={{ opacity: 1, x: 0 }}
+							transition={{ duration: 0.5, delay: 0.3 }}
+							viewport={{ once: true }}
+							className="space-y-4"
+						>
+							<div className="flex items-center gap-2 mb-4">
+								<Cloud className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+								<h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+									Cloud & DevOps
+								</h3>
+							</div>
+							<div className="flex flex-wrap gap-2">
+								{techStack.cloud.map((tech) => (
+									<TechBadge key={tech} name={tech} />
+								))}
+							</div>
+						</motion.div>
+					</div>
+				</div>
+			</section>
+
+			{/* Contact Section */}
+			<section id="contact" className="py-20 relative overflow-hidden bg-gradient-to-br from-blue-50 via-indigo-50 to-violet-50 dark:from-zinc-950 dark:via-blue-950/20 dark:to-indigo-950/20">
+				<motion.div
+					initial={{ opacity: 0, scale: 0.8 }}
+					whileInView={{ opacity: 0.2, scale: 1 }}
+					transition={{ duration: 1.5 }}
+					viewport={{ once: true }}
+					className="absolute inset-0 flex items-center justify-center"
+				>
+					<div className="w-[600px] h-[600px] bg-gradient-to-r from-blue-400 to-indigo-500 dark:from-blue-600 dark:to-indigo-700 rounded-full filter blur-3xl opacity-20" />
+				</motion.div>
+				<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.6 }}
+						viewport={{ once: true }}
+					>
+						<h2 className="text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
+							Travaillons Ensemble
+						</h2>
+						<p className="text-lg text-zinc-600 dark:text-zinc-400 mb-8">
+							Je suis disponible pour des missions freelance et des
+							collaborations sur des projets innovants.
+						</p>
+
+						<div className="flex gap-4 justify-center">
+							<a
+								href="mailto:contact@antoningrillet.dev"
+								className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-medium hover:scale-105 transition-transform"
+							>
+								<Mail className="h-5 w-5" />
+								Me contacter
+							</a>
+							<a
+								href="https://linkedin.com/in/antoningrillet"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 font-medium hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+							>
+								<Linkedin className="h-5 w-5" />
+								LinkedIn
+							</a>
+						</div>
+					</motion.div>
+				</div>
+			</section>
+
+			{/* Footer */}
+			<footer className="py-8 bg-gradient-to-r from-zinc-900 via-blue-900 to-purple-900 dark:from-zinc-950 dark:via-blue-950 dark:to-purple-950 border-t border-zinc-800 dark:border-zinc-700">
+				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+					<p className="text-zinc-300 dark:text-zinc-400">
+						© 2024 Antonin Grillet. Tous droits réservés. Déployé avec 💜 sur
+						Vercel.
+					</p>
+				</div>
+			</footer>
+		</>
+	);
 }
