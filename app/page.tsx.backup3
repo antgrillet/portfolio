@@ -5,7 +5,6 @@ import { Navigation } from "@/components/Navigation";
 import { ProjectCard } from "@/components/ProjectCard";
 import { TechBadge } from "@/components/TechBadge";
 import { PhotoCarousel } from "@/components/PhotoCarousel";
-import { ContactModal } from "@/components/ContactModal";
 import { Project } from "@/data/projects";
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -27,7 +26,6 @@ export default function Home() {
 	const [projects, setProjects] = useState<Project[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-	const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
 	useEffect(() => {
 		const fetchProjects = async () => {
@@ -69,35 +67,34 @@ export default function Home() {
 		<>
 			<Navigation />
 
-		{/* Hero Section */}
-		<section
-			id="hero"
-			className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
-		>
-			<div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 dark:from-zinc-950 dark:via-blue-950 dark:to-purple-950" />
-
-			<motion.div
-				initial={{ opacity: 0 }}
-				animate={{ opacity: 0.4 }}
-				transition={{ duration: 2 }}
-				className="absolute inset-0"
+			{/* Hero Section */}
+			<section
+				id="hero"
+				className="min-h-screen flex items-center justify-center relative overflow-hidden"
 			>
-				<div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-blue-400 to-cyan-400 dark:from-blue-600 dark:to-cyan-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-70 animate-blob" />
-				<div className="absolute top-40 right-20 w-96 h-96 bg-gradient-to-r from-purple-400 to-pink-400 dark:from-purple-600 dark:to-pink-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-70 animate-blob animation-delay-2000" />
-				<div className="absolute -bottom-8 left-40 w-96 h-96 bg-gradient-to-r from-pink-400 to-rose-400 dark:from-pink-600 dark:to-rose-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-70 animate-blob animation-delay-4000" />
-				<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-indigo-400 to-blue-400 dark:from-indigo-600 dark:to-blue-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-30 animate-blob animation-delay-3000" />
-			</motion.div>
+				<div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 dark:from-zinc-950 dark:via-blue-950 dark:to-purple-950" />
 
-			<div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-				{/* Section 1: Grid Photo + Bio */}
-				<div className="grid md:grid-cols-2 gap-12 items-center mb-20">
-					{/* Photo Section - Carousel */}
-					<motion.div
-						initial={{ opacity: 0, x: -50 }}
-						animate={{ opacity: 1, x: 0 }}
-						transition={{ duration: 0.8 }}
-						className="flex justify-center md:justify-end group"
-					>
+				<motion.div
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 0.4 }}
+					transition={{ duration: 2 }}
+					className="absolute inset-0"
+				>
+					<div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-blue-400 to-cyan-400 dark:from-blue-600 dark:to-cyan-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-70 animate-blob" />
+					<div className="absolute top-40 right-20 w-96 h-96 bg-gradient-to-r from-purple-400 to-pink-400 dark:from-purple-600 dark:to-pink-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-70 animate-blob animation-delay-2000" />
+					<div className="absolute -bottom-8 left-40 w-96 h-96 bg-gradient-to-r from-pink-400 to-rose-400 dark:from-pink-600 dark:to-rose-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-70 animate-blob animation-delay-4000" />
+					<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-indigo-400 to-blue-400 dark:from-indigo-600 dark:to-blue-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-30 animate-blob animation-delay-3000" />
+				</motion.div>
+
+				<div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+					<div className="grid md:grid-cols-2 gap-12 items-center">
+						{/* Photo Section - Carousel */}
+						<motion.div
+							initial={{ opacity: 0, x: -50 }}
+							animate={{ opacity: 1, x: 0 }}
+							transition={{ duration: 0.8 }}
+							className="flex justify-center md:justify-end group"
+						>
 						<PhotoCarousel
 							images={[
 								"/images/profile-1.jpg",
@@ -106,190 +103,123 @@ export default function Home() {
 							alt="Antonin Grillet"
 							autoPlayInterval={4500}
 						/>
-					</motion.div>
+						</motion.div>
 
-					{/* Bio Section - Simplifiée */}
-					<motion.div
-						initial={{ opacity: 0, x: 50 }}
-						animate={{ opacity: 1, x: 0 }}
-						transition={{ duration: 0.8, delay: 0.2 }}
-						className="text-center md:text-left space-y-6"
-					>
-						<div>
+						{/* Bio Section */}
+						<motion.div
+							initial={{ opacity: 0, x: 50 }}
+							animate={{ opacity: 1, x: 0 }}
+							transition={{ duration: 0.8, delay: 0.2 }}
+							className="text-center md:text-left"
+						>
 							<h1 className="text-5xl md:text-6xl font-bold mb-4">
 								<span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
 									Antonin Grillet
 								</span>
 							</h1>
 
-							<p className="text-2xl md:text-3xl text-zinc-700 dark:text-zinc-300 mb-4 font-medium">
+							<p className="text-2xl md:text-3xl text-zinc-700 dark:text-zinc-300 mb-6 font-medium">
 								Développeur Web Full-Stack
 							</p>
 
-							<p className="text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-xl">
-								Passionné par le développement web, je crée des applications modernes et performantes. Entrepreneur derrière{" "}
-								<span className="font-semibold text-pink-600 dark:text-pink-400">
-									GC Handball
-								</span>
-								.
-							</p>
-						</div>
+							<div className="space-y-4 mb-8">
+<p className="text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">
+									Formé à{" "}
+									<span className="font-semibold text-blue-600 dark:text-blue-400">
+										l&apos;École 42
+									</span>
+									, je me suis spécialisé en développement web full-stack en{" "}
+									<span className="font-semibold text-purple-600 dark:text-purple-400">
+										autodidacte
+									</span>
+									. Entrepreneur passionné, je dirige aujourd&apos;hui{" "}
+									et{" "}
+									<span className="font-semibold text-pink-600 dark:text-pink-400">
+										GC Handball
+									</span>
+									, tout en créant des applications web modernes et performantes.
+								</p>
 
-						{/* Social Links */}
-						<motion.div
-							initial={{ opacity: 0 }}
-							animate={{ opacity: 1 }}
-							transition={{ delay: 0.4 }}
-							className="flex gap-4 justify-center md:justify-start"
-						>
-							<a
-								href="https://github.com/antoningrillet"
-								target="_blank"
-								rel="noopener noreferrer"
-								className="p-3 rounded-lg bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors shadow-md hover:shadow-lg"
-							>
-								<Github className="h-6 w-6" />
-							</a>
-							<a
-								href="https://linkedin.com/in/antoningrillet"
-								target="_blank"
-								rel="noopener noreferrer"
-								className="p-3 rounded-lg bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors shadow-md hover:shadow-lg"
-							>
-								<Linkedin className="h-6 w-6" />
-							</a>
-							<a
-								href="mailto:contact@antoningrillet.dev"
-								className="p-3 rounded-lg bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors shadow-md hover:shadow-lg"
-							>
-								<Mail className="h-6 w-6" />
-							</a>
-						</motion.div>
+								{/* Badges CEO */}
+								<div className="flex flex-wrap gap-3 justify-center md:justify-start">
+									<motion.div
+										initial={{ opacity: 0, scale: 0.8 }}
+										animate={{ opacity: 1, scale: 1 }}
+										transition={{ delay: 0.4 }}
+										className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg"
+									>
+										<Briefcase className="h-4 w-4" />
+										<span className="font-medium text-sm">CEO - Handle</span>
+									</motion.div>
 
-						{/* CTA Buttons */}
-						<motion.div
-							initial={{ opacity: 0 }}
-							animate={{ opacity: 1 }}
-							transition={{ delay: 0.5 }}
-							className="flex flex-wrap gap-4 justify-center md:justify-start"
-						>
-							<button
-								onClick={() => setIsContactModalOpen(true)}
+									<motion.div
+										initial={{ opacity: 0, scale: 0.8 }}
+										animate={{ opacity: 1, scale: 1 }}
+										transition={{ delay: 0.5 }}
+										className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg"
+									>
+										<Briefcase className="h-4 w-4" />
+										<span className="font-medium text-sm">CEO - GC Handball</span>
+									</motion.div>
+
+									<motion.div
+										initial={{ opacity: 0, scale: 0.8 }}
+										animate={{ opacity: 1, scale: 1 }}
+										transition={{ delay: 0.6 }}
+										className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg"
+									>
+										<Award className="h-4 w-4" />
+										<span className="font-medium text-sm">École 42</span>
+									</motion.div>
+								</div>
+							</div>
+
+							{/* Social Links */}
+							<motion.div
+								initial={{ opacity: 0 }}
+								animate={{ opacity: 1 }}
+								transition={{ delay: 0.7 }}
+								className="flex gap-4 justify-center md:justify-start mb-8"
+							>
+								<a
+									href="https://github.com/antoningrillet"
+									target="_blank"
+									rel="noopener noreferrer"
+									className="p-3 rounded-lg bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors shadow-md"
+								>
+									<Github className="h-6 w-6" />
+								</a>
+								<a
+									href="https://linkedin.com/in/antoningrillet"
+									target="_blank"
+									rel="noopener noreferrer"
+									className="p-3 rounded-lg bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors shadow-md"
+								>
+									<Linkedin className="h-6 w-6" />
+								</a>
+								<a
+									href="mailto:contact@antoningrillet.dev"
+									className="p-3 rounded-lg bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors shadow-md"
+								>
+									<Mail className="h-6 w-6" />
+								</a>
+							</motion.div>
+
+							{/* CTA Button */}
+							<motion.button
+								onClick={scrollToProjects}
+								initial={{ opacity: 0 }}
+								animate={{ opacity: 1 }}
+								transition={{ delay: 0.8 }}
 								className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium shadow-xl hover:shadow-2xl hover:scale-105 transition-all"
 							>
-								<Mail className="h-5 w-5" />
-								Me contacter
-							</button>
-							<button
-								onClick={scrollToProjects}
-								className="inline-flex items-center gap-2 px-8 py-4 rounded-full border-2 border-blue-600 dark:border-purple-600 text-blue-600 dark:text-purple-400 hover:bg-blue-50 dark:hover:bg-purple-950/20 font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all"
-							>
 								Découvrir mes projets
-								<ChevronDown className="h-5 w-5" />
-							</button>
-						</motion.div>
-					</motion.div>
-				</div>
-
-			{/* Section 2: Timeline pleine largeur */}
-			<motion.div
-				initial={{ opacity: 0, y: 30 }}
-				animate={{ opacity: 1, y: 0 }}
-				transition={{ duration: 0.8, delay: 0.6 }}
-				className="max-w-5xl mx-auto"
-			>
-				<h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-12 text-center">
-					Mon Parcours
-				</h3>
-				
-				{/* Timeline horizontale */}
-				<div className="relative">
-					{/* Ligne horizontale */}
-					<div className="absolute top-12 left-0 right-0 h-0.5 bg-gradient-to-r from-orange-500 via-purple-500 to-pink-500" />
-					
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4">
-						{/* 2022-2023: École 42 */}
-						<motion.div
-							initial={{ opacity: 0, y: 20 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{ delay: 0.7 }}
-							className="relative flex flex-col items-center"
-						>
-							{/* Point sur la ligne */}
-							<div className="absolute top-10 w-6 h-6 rounded-full bg-gradient-to-r from-orange-500 to-red-500 ring-4 ring-white dark:ring-zinc-950 z-10" />
-							
-							{/* Carte d'information */}
-							<div className="mt-20 bg-white dark:bg-zinc-800/50 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all border border-zinc-200 dark:border-zinc-700 w-full hover:-translate-y-1">
-								<div className="flex flex-col items-center text-center">
-									<span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium mb-2">
-										2022 - 2023
-									</span>
-									<h4 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-2">
-										École 42
-									</h4>
-									<p className="text-sm text-zinc-600 dark:text-zinc-400">
-										Formation intensive en programmation
-									</p>
-								</div>
-							</div>
-						</motion.div>
-
-						{/* 2024: Freelance */}
-						<motion.div
-							initial={{ opacity: 0, y: 20 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{ delay: 0.8 }}
-							className="relative flex flex-col items-center"
-						>
-							{/* Point sur la ligne */}
-							<div className="absolute top-10 w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 ring-4 ring-white dark:ring-zinc-950 z-10" />
-							
-							{/* Carte d'information */}
-							<div className="mt-20 bg-white dark:bg-zinc-800/50 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all border border-zinc-200 dark:border-zinc-700 w-full hover:-translate-y-1">
-								<div className="flex flex-col items-center text-center">
-									<span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium mb-2">
-										2024
-									</span>
-									<h4 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-2">
-										Freelance
-									</h4>
-									<p className="text-sm text-zinc-600 dark:text-zinc-400">
-										Développement web full-stack
-									</p>
-								</div>
-							</div>
-						</motion.div>
-
-						{/* 2025: GC Handball */}
-						<motion.div
-							initial={{ opacity: 0, y: 20 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{ delay: 0.9 }}
-							className="relative flex flex-col items-center"
-						>
-							{/* Point sur la ligne */}
-							<div className="absolute top-10 w-6 h-6 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 ring-4 ring-white dark:ring-zinc-950 z-10" />
-							
-							{/* Carte d'information */}
-							<div className="mt-20 bg-white dark:bg-zinc-800/50 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all border border-zinc-200 dark:border-zinc-700 w-full hover:-translate-y-1">
-								<div className="flex flex-col items-center text-center">
-									<span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium mb-2">
-										2025
-									</span>
-									<h4 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-2">
-										GC Handball
-									</h4>
-									<p className="text-sm text-zinc-600 dark:text-zinc-400">
-										Création de la plateforme de coaching
-									</p>
-								</div>
-							</div>
+								<ChevronDown className="h-5 w-5 animate-bounce" />
+							</motion.button>
 						</motion.div>
 					</div>
 				</div>
-			</motion.div>
-			</div>
-		</section>
+			</section>
 
 			{/* Projects Section */}
 			<section id="projects" className="py-20 relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-zinc-950 dark:via-blue-950/20 dark:to-purple-950/20">
@@ -349,23 +279,6 @@ export default function Home() {
 							))}
 						</div>
 					)}
-
-					{/* CTA Button - Projects */}
-					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.6, delay: 0.2 }}
-						viewport={{ once: true }}
-						className="text-center mt-12"
-					>
-						<button
-							onClick={() => setIsContactModalOpen(true)}
-							className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium shadow-xl hover:shadow-2xl hover:scale-105 transition-all"
-						>
-							<Mail className="h-5 w-5" />
-							Discutons de votre projet
-						</button>
-					</motion.div>
 				</div>
 			</section>
 
@@ -479,23 +392,6 @@ export default function Home() {
 							</div>
 						</motion.div>
 					</div>
-
-					{/* CTA Button - Tech Stack */}
-					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.6, delay: 0.4 }}
-						viewport={{ once: true }}
-						className="text-center mt-12"
-					>
-						<button
-							onClick={() => setIsContactModalOpen(true)}
-							className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium shadow-xl hover:shadow-2xl hover:scale-105 transition-all"
-						>
-							<Mail className="h-5 w-5" />
-							Besoin d&apos;un développeur ?
-						</button>
-					</motion.div>
 				</div>
 			</section>
 
@@ -526,13 +422,13 @@ export default function Home() {
 						</p>
 
 						<div className="flex gap-4 justify-center">
-							<button
-								onClick={() => setIsContactModalOpen(true)}
+							<a
+								href="mailto:contact@antoningrillet.dev"
 								className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-medium hover:scale-105 transition-transform"
 							>
 								<Mail className="h-5 w-5" />
 								Me contacter
-							</button>
+							</a>
 							<a
 								href="https://linkedin.com/in/antoningrillet"
 								target="_blank"
@@ -556,12 +452,6 @@ export default function Home() {
 					</p>
 				</div>
 			</footer>
-
-			{/* Contact Modal */}
-			<ContactModal
-				isOpen={isContactModalOpen}
-				onClose={() => setIsContactModalOpen(false)}
-			/>
 		</>
 	);
 }

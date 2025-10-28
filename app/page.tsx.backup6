@@ -349,23 +349,6 @@ export default function Home() {
 							))}
 						</div>
 					)}
-
-					{/* CTA Button - Projects */}
-					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.6, delay: 0.2 }}
-						viewport={{ once: true }}
-						className="text-center mt-12"
-					>
-						<button
-							onClick={() => setIsContactModalOpen(true)}
-							className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium shadow-xl hover:shadow-2xl hover:scale-105 transition-all"
-						>
-							<Mail className="h-5 w-5" />
-							Discutons de votre projet
-						</button>
-					</motion.div>
 				</div>
 			</section>
 
@@ -479,23 +462,6 @@ export default function Home() {
 							</div>
 						</motion.div>
 					</div>
-
-					{/* CTA Button - Tech Stack */}
-					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.6, delay: 0.4 }}
-						viewport={{ once: true }}
-						className="text-center mt-12"
-					>
-						<button
-							onClick={() => setIsContactModalOpen(true)}
-							className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium shadow-xl hover:shadow-2xl hover:scale-105 transition-all"
-						>
-							<Mail className="h-5 w-5" />
-							Besoin d&apos;un développeur ?
-						</button>
-					</motion.div>
 				</div>
 			</section>
 
@@ -526,13 +492,13 @@ export default function Home() {
 						</p>
 
 						<div className="flex gap-4 justify-center">
-							<button
-								onClick={() => setIsContactModalOpen(true)}
+							<a
+								href="mailto:contact@antoningrillet.dev"
 								className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-medium hover:scale-105 transition-transform"
 							>
 								<Mail className="h-5 w-5" />
 								Me contacter
-							</button>
+							</a>
 							<a
 								href="https://linkedin.com/in/antoningrillet"
 								target="_blank"
@@ -556,12 +522,6 @@ export default function Home() {
 					</p>
 				</div>
 			</footer>
-
-			{/* Contact Modal */}
-			<ContactModal
-				isOpen={isContactModalOpen}
-				onClose={() => setIsContactModalOpen(false)}
-			/>
 		</>
 	);
 }
