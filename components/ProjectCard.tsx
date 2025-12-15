@@ -1,31 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { ExternalLink, ArrowRight } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { motion } from "motion/react";
 
 interface ProjectCardProps {
-	id?: string;
 	title: string;
 	description: string;
 	techStack: string[];
 	liveUrl?: string;
 	imageUrl?: string;
-	hasCaseStudy?: boolean;
-}
-
-// Liste des projets avec case study
-const projectsWithCaseStudy = ["gchandball", "nailsbymams", "inked"];
-
-// Fonction pour générer un slug à partir du titre
-function generateSlug(title: string): string {
-	return title
-		.toLowerCase()
-		.normalize("NFD")
-		.replace(/[\u0300-\u036f]/g, "")
-		.replace(/[^a-z0-9]+/g, "-")
-		.replace(/(^-|-$)/g, "");
 }
 
 // Fonction pour générer un gradient unique basé sur le titre
@@ -47,7 +31,6 @@ function getGradientForTitle(title: string): string {
 }
 
 export function ProjectCard({
-	id,
 	title,
 	description,
 	techStack,
@@ -61,12 +44,6 @@ export function ProjectCard({
 		.join("")
 		.toUpperCase()
 		.slice(0, 3);
-
-	// Vérifier si ce projet a un case study
-	const slug = id || generateSlug(title);
-	const hasCaseStudy = projectsWithCaseStudy.some(
-		(p) => p === slug || title.toLowerCase().includes(p)
-	);
 
 	const CardContent = () => (
 		<>
@@ -100,25 +77,11 @@ export function ProjectCard({
 				)}
 
 				{/* Overlay actions */}
-				<div className="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:translate-x-0 translate-x-2">
-					{liveUrl && (
+				{liveUrl && (
+					<div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:translate-x-0 translate-x-2">
 						<div className="bg-white dark:bg-zinc-900 rounded-full p-3 shadow-lg">
 							<ExternalLink className="h-5 w-5 text-blue-600 dark:text-blue-400" />
 						</div>
-					)}
-					{hasCaseStudy && (
-						<div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-full p-3 shadow-lg">
-							<ArrowRight className="h-5 w-5 text-white" />
-						</div>
-					)}
-				</div>
-
-				{/* Case study badge */}
-				{hasCaseStudy && (
-					<div className="absolute top-4 left-4">
-						<span className="px-3 py-1 text-xs font-medium rounded-full bg-white/90 dark:bg-zinc-900/90 text-blue-600 dark:text-blue-400 shadow-lg">
-							Case Study
-						</span>
 					</div>
 				)}
 			</div>
@@ -145,43 +108,12 @@ export function ProjectCard({
 						</span>
 					)}
 				</div>
-
-				{/* CTA for case study */}
-				{hasCaseStudy && (
-					<div className="mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-700">
-						<span className="text-sm font-medium text-blue-600 dark:text-blue-400 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
-							Voir le case study
-							<ArrowRight className="h-4 w-4" />
-						</span>
-					</div>
-				)}
 			</div>
 		</>
 	);
 
 	const cardClasses =
 		"group relative overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-500/5 transition-all duration-300 hover:-translate-y-1";
-
-	// Si le projet a un case study, on utilise Link vers la page détail
-	// Sinon on utilise un lien externe
-	if (hasCaseStudy) {
-		return (
-			<motion.div
-				initial={{ opacity: 0, y: 20 }}
-				whileInView={{ opacity: 1, y: 0 }}
-				transition={{ duration: 0.5 }}
-				viewport={{ once: true }}
-				className={cardClasses}
-			>
-				<Link
-					href={`/projects/${slug}`}
-					className="block"
-				>
-					<CardContent />
-				</Link>
-			</motion.div>
-		);
-	}
 
 	return (
 		<motion.div
