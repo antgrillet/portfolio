@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Navigation } from "@/components/Navigation";
 import { HeroSection } from "@/components/HeroSection";
+import { TimelineSection } from "@/components/TimelineSection";
 import { ProjectsSection } from "@/components/ProjectsSection";
 import { TechStackSection } from "@/components/TechStackSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
@@ -21,6 +22,7 @@ export function HomeClient() {
 			<Navigation />
 			<main>
 				<HeroSection onContactClick={openContactModal} />
+				<TimelineSection />
 				<ProjectsSection onContactClick={openContactModal} />
 				<TestimonialsSection />
 				<TechStackSection onContactClick={openContactModal} />
