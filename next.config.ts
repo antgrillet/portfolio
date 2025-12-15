@@ -5,8 +5,12 @@ const nextConfig: NextConfig = {
 		remotePatterns: [
 			{
 				protocol: "https",
-				hostname: "api.screenshotone.com",
-				pathname: "/take/**",
+				hostname: "image.thum.io",
+				pathname: "/get/**",
+			},
+			{
+				protocol: "https",
+				hostname: "*.public.blob.vercel-storage.com",
 			},
 		],
 	},

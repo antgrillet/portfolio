@@ -1,9 +1,16 @@
 import { NextResponse } from "next/server";
+import { list } from "@vercel/blob";
 import { Project, VercelProject } from "@/data/projects";
 import {
 	projectsConfig,
 	DEFAULT_GITHUB_OWNER,
 } from "@/data/projects-config";
+
+// Type pour les blobs du Vercel Blob storage
+interface BlobItem {
+	url: string;
+	pathname: string;
+}
 
 interface GitHubRepo {
 	name: string;
@@ -124,6 +131,18 @@ export async function GET() {
 	}
 
 	try {
+		// Récupérer les screenshots depuis Vercel Blob
+		let screenshotBlobs: BlobItem[] = [];
+		try {
+			const blobResult = await list({
+				prefix: "screenshots/",
+				token: process.env.BLOB_READ_WRITE_TOKEN,
+			});
+			screenshotBlobs = blobResult.blobs;
+		} catch {
+			console.warn("Impossible de récupérer les screenshots depuis Blob");
+		}
+
 		const response = await fetch("https://api.vercel.com/v9/projects", {
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -262,13 +281,15 @@ export async function GET() {
 				// Générer automatiquement l'URL du screenshot
 				const liveUrl = productionUrl ? `https://${productionUrl}` : undefined;
 
-				// Générer le screenshot avec l'API ScreenshotOne
-				const imageUrl =
-					liveUrl && process.env.SCREENSHOT_API_KEY
-						? `https://api.screenshotone.com/take?access_key=${process.env.SCREENSHOT_API_KEY}&url=${encodeURIComponent(
-								liveUrl
-						  )}&viewport_width=1920&viewport_height=1080&device_scale_factor=1&format=jpg&block_ads=true&block_cookie_banners=true&block_trackers=true&cache=true&full_page=false`
-						: undefined;
+				// Chercher le screenshot dans Vercel Blob, sinon fallback sur Thum.io
+				const blobScreenshot = screenshotBlobs.find(
+					(b) => b.pathname === `screenshots/${project.name}.png`
+				);
+				const imageUrl = blobScreenshot?.url
+					? blobScreenshot.url
+					: liveUrl
+					? `https://image.thum.io/get/width/1920/crop/1080/noanimate/${liveUrl}`
+					: undefined;
 
 				return {
 					id: project.id,
