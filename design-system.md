@@ -83,7 +83,9 @@ export default function VibeTwo() {
           variants={itemVariants}
           className="group col-span-1 flex cursor-pointer items-center justify-between bg-white p-6 transition-colors hover:bg-[#F6F9FF] md:col-span-4 md:p-8"
         >
-          <span className="text-xs font-medium text-[#111111]">Voir les réalisations</span>
+          <span className="text-xs font-medium text-[#111111]">
+            Voir les réalisations
+          </span>
           <span className="text-[10px] text-[#8CA2CE] transition-colors duration-300 group-hover:text-[#1F4FD7]">
             ↗
           </span>
