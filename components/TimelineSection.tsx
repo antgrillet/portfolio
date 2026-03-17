@@ -1,297 +1,116 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { GraduationCap, Briefcase, Code, Trophy } from "lucide-react";
+import { Briefcase, GraduationCap, Rocket, Trophy } from "lucide-react";
 
-interface TimelineItem {
-	year: string;
-	title: string;
-	subtitle?: string;
-	description: string;
-	type: "education" | "work" | "project";
-	gradient: string;
-	icon: React.ReactNode;
-}
-
-const timelineData: TimelineItem[] = [
-	{
-		year: "2021",
-		title: "STAPS",
-		subtitle: "Sciences et Techniques des Activités Physiques et Sportives",
-		description: "Année universitaire en sciences du sport",
-		type: "education",
-		gradient: "from-green-500 to-emerald-500",
-		icon: <GraduationCap className="h-5 w-5" />,
-	},
-	{
-		year: "2022 - 2023",
-		title: "École 42",
-		subtitle: "Paris",
-		description: "Formation intensive en programmation et algorithmique",
-		type: "education",
-		gradient: "from-orange-500 to-red-500",
-		icon: <Code className="h-5 w-5" />,
-	},
-	{
-		year: "2024",
-		title: "Freelance",
-		subtitle: "Développeur Full-Stack",
-		description: "Création de sites web et applications pour des clients variés",
-		type: "work",
-		gradient: "from-purple-500 to-blue-500",
-		icon: <Briefcase className="h-5 w-5" />,
-	},
-	{
-		year: "2025",
-		title: "GC Handball",
-		subtitle: "Fondateur & Développeur",
-		description: "Création de la plateforme de coaching sportif",
-		type: "project",
-		gradient: "from-pink-500 to-rose-500",
-		icon: <Trophy className="h-5 w-5" />,
-	},
+const timelineData = [
+  {
+    year: "2025",
+    title: "GC Handball",
+    subtitle: "Fondateur & développeur",
+    description:
+      "Développement d'une plateforme de coaching handball, de l'idée à la mise en production.",
+    icon: Trophy,
+    label: "Produit",
+  },
+  {
+    year: "2024 - aujourd'hui",
+    title: "Freelance",
+    subtitle: "Développeur full-stack",
+    description:
+      "Conception et développement de sites web pour des indépendants et petites entreprises.",
+    icon: Briefcase,
+    label: "Clients",
+  },
+  {
+    year: "2022 - 2023",
+    title: "École 42",
+    subtitle: "Paris",
+    description:
+      "Formation en algorithmique, systèmes et résolution de problèmes. Peer-to-peer, pas de cours magistraux.",
+    icon: Rocket,
+    label: "Formation",
+  },
+  {
+    year: "2021",
+    title: "STAPS",
+    subtitle: "Sciences du sport",
+    description:
+      "Première année en sciences du sport avant de me réorienter vers le développement.",
+    icon: GraduationCap,
+    label: "Formation",
+  },
 ];
 
-function TimelineCard({
-	item,
-	index,
-	shouldReduceMotion,
-}: {
-	item: TimelineItem;
-	index: number;
-	shouldReduceMotion: boolean | null;
-}) {
-	const isLeft = index % 2 === 0;
-
-	return (
-		<div className="relative flex items-center justify-center">
-			{/* Desktop: Alternating layout */}
-			<div className="hidden md:grid md:grid-cols-[1fr_auto_1fr] md:gap-8 w-full max-w-4xl">
-				{/* Left side */}
-				<div className={`flex ${isLeft ? "justify-end" : "justify-end opacity-0"}`}>
-					{isLeft && (
-						<motion.div
-							initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: -50 }}
-							whileInView={{ opacity: 1, x: 0 }}
-							viewport={{ once: true, margin: "-100px" }}
-							transition={{ duration: 0.6, delay: 0.2 }}
-							className="group"
-						>
-							<div className="relative bg-white dark:bg-zinc-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-zinc-200 dark:border-zinc-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 max-w-sm">
-								{/* Connector line */}
-								<div className="absolute top-1/2 -right-8 w-8 h-0.5 bg-gradient-to-r from-zinc-300 dark:from-zinc-600 to-transparent" />
-
-								<div className="flex items-center gap-3 mb-3">
-									<div className={`p-2 rounded-xl bg-gradient-to-br ${item.gradient} text-white shadow-lg`}>
-										{item.icon}
-									</div>
-									<span className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">
-										{item.year}
-									</span>
-								</div>
-
-								<h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-									{item.title}
-								</h3>
-
-								{item.subtitle && (
-									<p className="text-sm font-medium text-zinc-600 dark:text-zinc-400 mb-2">
-										{item.subtitle}
-									</p>
-								)}
-
-								<p className="text-sm text-zinc-500 dark:text-zinc-500 leading-relaxed">
-									{item.description}
-								</p>
-							</div>
-						</motion.div>
-					)}
-				</div>
-
-				{/* Center dot */}
-				<div className="relative flex items-center justify-center">
-					<motion.div
-						initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0 }}
-						whileInView={{ opacity: 1, scale: 1 }}
-						viewport={{ once: true, margin: "-100px" }}
-						transition={{ duration: 0.4, type: "spring", stiffness: 200 }}
-						className={`relative z-10 w-5 h-5 rounded-full bg-gradient-to-br ${item.gradient} ring-4 ring-white dark:ring-zinc-900 shadow-lg`}
-					>
-						<div className={`absolute inset-0 rounded-full bg-gradient-to-br ${item.gradient} animate-ping opacity-20`} />
-					</motion.div>
-				</div>
-
-				{/* Right side */}
-				<div className={`flex ${!isLeft ? "justify-start" : "justify-start opacity-0"}`}>
-					{!isLeft && (
-						<motion.div
-							initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: 50 }}
-							whileInView={{ opacity: 1, x: 0 }}
-							viewport={{ once: true, margin: "-100px" }}
-							transition={{ duration: 0.6, delay: 0.2 }}
-							className="group"
-						>
-							<div className="relative bg-white dark:bg-zinc-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-zinc-200 dark:border-zinc-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 max-w-sm">
-								{/* Connector line */}
-								<div className="absolute top-1/2 -left-8 w-8 h-0.5 bg-gradient-to-l from-zinc-300 dark:from-zinc-600 to-transparent" />
-
-								<div className="flex items-center gap-3 mb-3">
-									<div className={`p-2 rounded-xl bg-gradient-to-br ${item.gradient} text-white shadow-lg`}>
-										{item.icon}
-									</div>
-									<span className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">
-										{item.year}
-									</span>
-								</div>
-
-								<h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-									{item.title}
-								</h3>
-
-								{item.subtitle && (
-									<p className="text-sm font-medium text-zinc-600 dark:text-zinc-400 mb-2">
-										{item.subtitle}
-									</p>
-								)}
-
-								<p className="text-sm text-zinc-500 dark:text-zinc-500 leading-relaxed">
-									{item.description}
-								</p>
-							</div>
-						</motion.div>
-					)}
-				</div>
-			</div>
-
-			{/* Mobile: Single column */}
-			<div className="md:hidden flex gap-6 w-full max-w-md">
-				{/* Timeline dot and line */}
-				<div className="relative flex flex-col items-center">
-					<motion.div
-						initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0 }}
-						whileInView={{ opacity: 1, scale: 1 }}
-						viewport={{ once: true, margin: "-50px" }}
-						transition={{ duration: 0.4, type: "spring", stiffness: 200 }}
-						className={`relative z-10 w-4 h-4 rounded-full bg-gradient-to-br ${item.gradient} ring-4 ring-white dark:ring-zinc-900 shadow-lg flex-shrink-0`}
-					/>
-				</div>
-
-				{/* Card */}
-				<motion.div
-					initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: 20 }}
-					whileInView={{ opacity: 1, x: 0 }}
-					viewport={{ once: true, margin: "-50px" }}
-					transition={{ duration: 0.5, delay: 0.1 }}
-					className="flex-1 group pb-8"
-				>
-					<div className="bg-white dark:bg-zinc-800/80 backdrop-blur-sm rounded-2xl p-5 shadow-lg border border-zinc-200 dark:border-zinc-700 hover:shadow-xl transition-all duration-300">
-						<div className="flex items-center gap-3 mb-3">
-							<div className={`p-2 rounded-xl bg-gradient-to-br ${item.gradient} text-white shadow-lg`}>
-								{item.icon}
-							</div>
-							<span className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">
-								{item.year}
-							</span>
-						</div>
-
-						<h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-							{item.title}
-						</h3>
-
-						{item.subtitle && (
-							<p className="text-sm font-medium text-zinc-600 dark:text-zinc-400 mb-2">
-								{item.subtitle}
-							</p>
-						)}
-
-						<p className="text-sm text-zinc-500 dark:text-zinc-500 leading-relaxed">
-							{item.description}
-						</p>
-					</div>
-				</motion.div>
-			</div>
-		</div>
-	);
-}
-
 export function TimelineSection() {
-	const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useReducedMotion();
 
-	return (
-		<section id="parcours" className="py-24 relative overflow-hidden">
-			{/* Background */}
-			<div className="absolute inset-0 bg-gradient-to-b from-zinc-50 via-white to-zinc-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950" />
+  return (
+    <section
+      id="parcours"
+      className="relative overflow-hidden px-4 py-16 sm:px-6 lg:px-8"
+    >
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.4),rgba(245,245,247,0.9))]" />
+      <div className="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.85fr_1.15fr]">
+        <motion.div
+          initial={shouldReduceMotion ? undefined : { opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="lg:sticky lg:top-28 lg:self-start"
+        >
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.34em] text-zinc-500">
+            Parcours
+          </p>
+          <h2 className="text-balance text-[clamp(2rem,3.4vw,3.4rem)] leading-[0.95] font-semibold text-zinc-950">
+            Mon parcours.
+          </h2>
+          <p className="mt-6 max-w-xl text-lg leading-8 text-zinc-600">
+            Un chemin atypique, du sport au développement web.
+          </p>
+        </motion.div>
 
-			<div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				{/* Header */}
-				<motion.div
-					initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
-					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ once: true }}
-					transition={{ duration: 0.6 }}
-					className="text-center mb-16"
-				>
-					<span className="inline-block px-4 py-1.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-sm font-medium mb-4">
-						Mon Parcours
-					</span>
-					<h2 className="text-4xl md:text-5xl font-bold mb-4">
-						<span className="bg-clip-text text-transparent bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-zinc-100 dark:to-zinc-400">
-							Formation & Expérience
-						</span>
-					</h2>
-					<p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
-						Du sport à la tech, mon parcours atypique m&apos;a permis de développer des compétences variées
-					</p>
-				</motion.div>
-
-				{/* Timeline */}
-				<div className="relative">
-					{/* Vertical line - Desktop */}
-					<div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 -translate-x-1/2">
-						<motion.div
-							initial={{ scaleY: 0 }}
-							whileInView={{ scaleY: 1 }}
-							viewport={{ once: true }}
-							transition={{ duration: 1.5, ease: "easeOut" }}
-							className="h-full w-full bg-gradient-to-b from-green-500 via-purple-500 to-pink-500 origin-top rounded-full"
-						/>
-					</div>
-
-					{/* Vertical line - Mobile */}
-					<div className="md:hidden absolute left-[7px] top-0 bottom-0 w-0.5">
-						<motion.div
-							initial={{ scaleY: 0 }}
-							whileInView={{ scaleY: 1 }}
-							viewport={{ once: true }}
-							transition={{ duration: 1.5, ease: "easeOut" }}
-							className="h-full w-full bg-gradient-to-b from-green-500 via-purple-500 to-pink-500 origin-top rounded-full"
-						/>
-					</div>
-
-					{/* Timeline items */}
-					<div className="relative space-y-12 md:space-y-16">
-						{timelineData.map((item, index) => (
-							<TimelineCard
-								key={item.title}
-								item={item}
-								index={index}
-								shouldReduceMotion={shouldReduceMotion}
-							/>
-						))}
-					</div>
-
-					{/* End dot */}
-					<motion.div
-						initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0 }}
-						whileInView={{ opacity: 1, scale: 1 }}
-						viewport={{ once: true }}
-						transition={{ duration: 0.5, delay: 0.3 }}
-						className="hidden md:flex absolute left-1/2 -translate-x-1/2 -bottom-4 w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 items-center justify-center shadow-lg"
-					>
-						<div className="w-3 h-3 rounded-full bg-white" />
-					</motion.div>
-				</div>
-			</div>
-		</section>
-	);
+        <div className="relative pl-6 sm:pl-8">
+          <div className="absolute bottom-0 left-2 top-0 w-px bg-gradient-to-b from-blue-200 via-zinc-300 to-transparent sm:left-3" />
+          <div className="space-y-6">
+            {timelineData.map((item, index) => (
+              <motion.article
+                key={item.title}
+                initial={shouldReduceMotion ? undefined : { opacity: 0, x: 26 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{
+                  duration: 0.62,
+                  delay: index * 0.08,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="relative rounded-[1.25rem] border border-white/70 bg-white/80 p-6 shadow-[0_24px_50px_rgba(15,23,42,0.08)] backdrop-blur-xl"
+              >
+                <div className="absolute left-[-2.15rem] top-7 flex h-10 w-10 items-center justify-center rounded-full border border-blue-200 bg-white shadow-[0_12px_30px_rgba(37,99,235,0.14)] sm:left-[-2.4rem]">
+                  <item.icon className="h-[18px] w-[18px] text-blue-600" />
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="rounded-full bg-zinc-950 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-white">
+                    {item.year}
+                  </span>
+                  <span className="text-xs font-semibold uppercase tracking-[0.28em] text-zinc-500">
+                    {item.label}
+                  </span>
+                </div>
+                <h3 className="mt-5 text-xl font-semibold text-zinc-950">
+                  {item.title}
+                </h3>
+                <p className="mt-1 text-sm font-medium uppercase tracking-[0.18em] text-zinc-500">
+                  {item.subtitle}
+                </p>
+                <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-600">
+                  {item.description}
+                </p>
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }

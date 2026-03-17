@@ -1,140 +1,170 @@
 "use client";
 
 import Image from "next/image";
-import { ExternalLink } from "lucide-react";
 import { motion } from "motion/react";
+import { ArrowUpRight } from "lucide-react";
 
 interface ProjectCardProps {
-	title: string;
-	description: string;
-	techStack: string[];
-	liveUrl?: string;
-	imageUrl?: string;
+  title: string;
+  description: string;
+  techStack: string[];
+  liveUrl?: string;
+  imageUrl?: string;
+  updatedAt?: string;
+  featured?: boolean;
+  compact?: boolean;
+  priority?: boolean;
 }
 
-// Fonction pour générer un gradient unique basé sur le titre
-function getGradientForTitle(title: string): string {
-	const gradients = [
-		"from-blue-500 via-cyan-500 to-teal-500",
-		"from-purple-500 via-pink-500 to-rose-500",
-		"from-orange-500 via-red-500 to-pink-500",
-		"from-green-500 via-emerald-500 to-teal-500",
-		"from-indigo-500 via-purple-500 to-pink-500",
-		"from-yellow-500 via-orange-500 to-red-500",
-		"from-cyan-500 via-blue-500 to-indigo-500",
-	];
+function formatDate(date?: string) {
+  if (!date) {
+    return null;
+  }
 
-	const hash = title
-		.split("")
-		.reduce((acc, char) => acc + char.charCodeAt(0), 0);
-	return gradients[hash % gradients.length];
+  try {
+    return new Intl.DateTimeFormat("fr-FR", {
+      month: "long",
+      year: "numeric",
+    }).format(new Date(date));
+  } catch {
+    return null;
+  }
+}
+
+function getGradientForTitle(title: string): string {
+  const gradients = [
+    "from-sky-500/90 via-blue-500/75 to-indigo-500/80",
+    "from-zinc-800 via-zinc-900 to-blue-700/80",
+    "from-cyan-500/80 via-sky-500/70 to-indigo-600/80",
+    "from-blue-500/70 via-violet-500/70 to-zinc-900",
+  ];
+
+  const hash = title
+    .split("")
+    .reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return gradients[hash % gradients.length];
 }
 
 export function ProjectCard({
-	title,
-	description,
-	techStack,
-	liveUrl,
-	imageUrl,
+  title,
+  description,
+  techStack,
+  liveUrl,
+  imageUrl,
+  updatedAt,
+  featured = false,
+  compact = false,
+  priority = false,
 }: ProjectCardProps) {
-	const gradient = getGradientForTitle(title);
-	const initials = title
-		.split(" ")
-		.map((word) => word[0])
-		.join("")
-		.toUpperCase()
-		.slice(0, 3);
+  const formattedDate = formatDate(updatedAt);
+  const gradient = getGradientForTitle(title);
+  const initials = title
+    .split(" ")
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 3);
 
-	const CardContent = () => (
-		<>
-			<div
-				className={`relative aspect-video overflow-hidden bg-gradient-to-br ${gradient}`}
-			>
-				{imageUrl ? (
-					<>
-						<Image
-							src={imageUrl}
-							alt={title}
-							fill
-							className="object-cover transition-transform duration-500 group-hover:scale-110"
-							onError={(e) => {
-								e.currentTarget.style.display = "none";
-							}}
-						/>
-						<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-					</>
-				) : (
-					<div className="absolute inset-0 flex items-center justify-center">
-						<div className="text-center">
-							<div className="text-6xl font-bold text-white/90 mb-2">
-								{initials}
-							</div>
-							<div className="text-sm text-white/70 font-medium px-4">
-								{title}
-							</div>
-						</div>
-					</div>
-				)}
+  const content = (
+    <motion.article
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+      className={`group relative h-full overflow-hidden rounded-[1.25rem] border border-white/12 bg-white/8 shadow-[0_30px_70px_rgba(0,0,0,0.22)] backdrop-blur-md ${
+        featured ? "min-h-[420px]" : compact ? "min-h-[240px]" : "min-h-[300px]"
+      }`}
+    >
+      <div className="absolute inset-0">
+        {imageUrl ? (
+          <Image
+            src={imageUrl}
+            alt={title}
+            fill
+            sizes={
+              featured
+                ? "(max-width: 1024px) 100vw, 60vw"
+                : "(max-width: 1024px) 100vw, 33vw"
+            }
+            priority={priority}
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+          />
+        ) : (
+          <div
+            className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${gradient}`}
+          >
+            <span className="text-6xl font-semibold text-white/92">
+              {initials}
+            </span>
+          </div>
+        )}
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.08)_0%,rgba(2,6,23,0.28)_34%,rgba(2,6,23,0.84)_100%)]" />
+      </div>
 
-				{/* Overlay actions */}
-				{liveUrl && (
-					<div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:translate-x-0 translate-x-2">
-						<div className="bg-white dark:bg-zinc-900 rounded-full p-3 shadow-lg">
-							<ExternalLink className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-						</div>
-					</div>
-				)}
-			</div>
+      <div className="relative flex h-full flex-col justify-between p-5 md:p-6">
+        <div className="flex items-start justify-between gap-3">
+          <span className="inline-flex rounded-full border border-white/[0.18] bg-white/10 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-white/90">
+            {featured ? "Featured" : "Live project"}
+          </span>
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.14] bg-black/10 px-3 py-1 text-xs font-medium text-white/70">
+            Open
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </span>
+        </div>
 
-			<div className="p-6">
-				<h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-					{title}
-				</h3>
-				<p className="text-zinc-600 dark:text-zinc-400 mb-4 line-clamp-2">
-					{description}
-				</p>
-				<div className="flex flex-wrap gap-2">
-					{techStack.slice(0, 4).map((tech) => (
-						<span
-							key={tech}
-							className="px-3 py-1 text-xs font-medium rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800"
-						>
-							{tech}
-						</span>
-					))}
-					{techStack.length > 4 && (
-						<span className="px-3 py-1 text-xs font-medium rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
-							+{techStack.length - 4}
-						</span>
-					)}
-				</div>
-			</div>
-		</>
-	);
+        <div className="space-y-5">
+          <div className="flex flex-wrap gap-2">
+            {techStack.slice(0, compact ? 3 : 4).map((tech) => (
+              <span
+                key={tech}
+                className="rounded-full border border-white/[0.14] bg-white/10 px-3 py-1 text-xs font-medium text-white/80 backdrop-blur-sm"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
 
-	const cardClasses =
-		"group relative overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-500/5 transition-all duration-300 hover:-translate-y-1";
+          <div>
+            <h3
+              className={`max-w-xl text-balance font-semibold text-white ${
+                featured ? "text-3xl leading-tight md:text-4xl" : "text-xl"
+              }`}
+            >
+              {title}
+            </h3>
+            <p
+              className={`mt-3 max-w-xl text-white/75 ${
+                compact ? "text-sm leading-6" : "text-base leading-7"
+              }`}
+            >
+              {description}
+            </p>
+          </div>
 
-	return (
-		<motion.div
-			initial={{ opacity: 0, y: 20 }}
-			whileInView={{ opacity: 1, y: 0 }}
-			transition={{ duration: 0.5 }}
-			viewport={{ once: true }}
-			className={cardClasses}
-		>
-			{liveUrl ? (
-				<a
-					href={liveUrl}
-					target="_blank"
-					rel="noopener noreferrer"
-					className="block"
-				>
-					<CardContent />
-				</a>
-			) : (
-				<CardContent />
-			)}
-		</motion.div>
-	);
+          <div className="flex items-center justify-between gap-4 text-sm text-white/64">
+            <span>
+              {formattedDate ? `Mis à jour ${formattedDate}` : "En ligne"}
+            </span>
+            <span className="inline-flex items-center gap-1 font-medium text-white">
+              Voir le projet
+              <ArrowUpRight className="h-4 w-4" />
+            </span>
+          </div>
+        </div>
+      </div>
+    </motion.article>
+  );
+
+  if (!liveUrl) {
+    return content;
+  }
+
+  return (
+    <a
+      href={liveUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block h-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-[#05070b] rounded-[1.25rem]"
+    >
+      {content}
+    </a>
+  );
 }

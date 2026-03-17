@@ -1,361 +1,374 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { X, Send, Loader2, CheckCircle, Mail, Phone, User, MessageSquare } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import {
+  CheckCircle,
+  Loader2,
+  Mail,
+  MessageSquare,
+  Phone,
+  Send,
+  User,
+  X,
+} from "lucide-react";
 
 interface ContactModalProps {
-	isOpen: boolean;
-	onClose: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export function ContactModal({ isOpen, onClose }: ContactModalProps) {
-	const [formData, setFormData] = useState({
-		name: "",
-		email: "",
-		phone: "",
-		message: "",
-	});
-	const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-	const [errorMessage, setErrorMessage] = useState("");
+  const shouldReduceMotion = useReducedMotion();
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const firstFieldRef = useRef<HTMLInputElement | null>(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		setStatus("loading");
-		setErrorMessage("");
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
 
-		try {
-			const response = await fetch("/api/contact", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(formData),
-			});
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
-			if (!response.ok) {
-				throw new Error("Erreur lors de l'envoi du message");
-			}
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
 
-			setStatus("success");
-			setFormData({ name: "", email: "", phone: "", message: "" });
+      if (event.key !== "Tab" || !dialogRef.current) {
+        return;
+      }
 
-			// Fermer le modal après 2 secondes
-			setTimeout(() => {
-				onClose();
-				setStatus("idle");
-			}, 2000);
-		} catch (error) {
-			setStatus("error");
-			setErrorMessage(
-				error instanceof Error ? error.message : "Une erreur est survenue"
-			);
-		}
-	};
+      const focusableElements = dialogRef.current.querySelectorAll<
+        | HTMLButtonElement
+        | HTMLInputElement
+        | HTMLTextAreaElement
+        | HTMLAnchorElement
+      >(
+        "button:not([disabled]), a[href], input:not([disabled]), textarea:not([disabled])",
+      );
 
-	const handleChange = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-	) => {
-		setFormData((prev) => ({
-			...prev,
-			[e.target.name]: e.target.value,
-		}));
-	};
+      if (focusableElements.length === 0) {
+        return;
+      }
 
-	return (
-		<AnimatePresence>
-			{isOpen && (
-				<>
-					{/* Backdrop */}
-					<motion.div
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						exit={{ opacity: 0 }}
-						onClick={onClose}
-						className="fixed inset-0 bg-gradient-to-br from-black/70 via-blue-950/50 to-purple-950/50 backdrop-blur-md z-50"
-					/>
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
 
-					{/* Modal */}
-					<div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-						<motion.div
-							initial={{ opacity: 0, scale: 0.9, y: 30 }}
-							animate={{ opacity: 1, scale: 1, y: 0 }}
-							exit={{ opacity: 0, scale: 0.9, y: 30 }}
-							transition={{ type: "spring", duration: 0.6, bounce: 0.3 }}
-							className="bg-gradient-to-br from-white to-zinc-50 dark:from-zinc-900 dark:to-zinc-950 rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden border border-zinc-200/50 dark:border-zinc-700/50 relative"
-							onClick={(e) => e.stopPropagation()}
-						>
-							{/* Gradient overlay for visual interest */}
-							<div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
-							{/* Header */}
-							<div className="sticky top-0 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border-b border-zinc-200/50 dark:border-zinc-700/50 px-6 py-5 flex items-center justify-between z-10">
-								<div>
-									<h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-										Me contacter
-									</h2>
-									<p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1">
-										Je vous répondrai dans les plus brefs délais
-									</p>
-								</div>
-								<button
-									onClick={onClose}
-									className="p-2 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all hover:scale-110"
-									aria-label="Fermer"
-								>
-									<X className="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
-								</button>
-							</div>
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
+      }
+    };
 
-							{/* Content */}
-							<div className="p-6 overflow-y-auto max-h-[calc(90vh-80px)] scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
-								{status === "success" ? (
-									<motion.div
-										initial={{ opacity: 0, scale: 0.8 }}
-										animate={{ opacity: 1, scale: 1 }}
-										transition={{ type: "spring", duration: 0.6, bounce: 0.4 }}
-										className="text-center py-12"
-									>
-										<motion.div
-											initial={{ scale: 0 }}
-											animate={{ scale: 1 }}
-											transition={{ delay: 0.2, type: "spring", duration: 0.6, bounce: 0.5 }}
-											className="relative inline-block mb-6"
-										>
-											<div className="absolute inset-0 bg-green-500/20 blur-2xl rounded-full" />
-											<div className="relative p-4 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 shadow-xl shadow-green-500/30">
-												<CheckCircle className="h-16 w-16 text-white" />
-											</div>
-										</motion.div>
-										<motion.h3
-											initial={{ opacity: 0, y: 10 }}
-											animate={{ opacity: 1, y: 0 }}
-											transition={{ delay: 0.3 }}
-											className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-3"
-										>
-											Message envoyé !
-										</motion.h3>
-										<motion.p
-											initial={{ opacity: 0, y: 10 }}
-											animate={{ opacity: 1, y: 0 }}
-											transition={{ delay: 0.4 }}
-											className="text-zinc-600 dark:text-zinc-400 text-lg"
-										>
-											Merci pour votre message. Je vous répondrai rapidement.
-										</motion.p>
-									</motion.div>
-								) : (
-									<>
-										{/* Contact Info */}
-										<div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-											<motion.div
-												initial={{ opacity: 0, x: -20 }}
-												animate={{ opacity: 1, x: 0 }}
-												transition={{ delay: 0.1 }}
-												className="group relative overflow-hidden"
-											>
-												<div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-blue-600/10 rounded-xl transition-all group-hover:from-blue-500/20 group-hover:to-blue-600/20" />
-												<div className="relative flex items-center gap-4 p-5 rounded-xl border border-blue-200/50 dark:border-blue-800/50 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-sm transition-all group-hover:border-blue-300 dark:group-hover:border-blue-700 group-hover:shadow-lg">
-													<div className="p-3 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
-														<Mail className="h-5 w-5 text-white" />
-													</div>
-													<div className="min-w-0 flex-1">
-														<p className="text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1 uppercase tracking-wider">
-															Email
-														</p>
-														<a
-															href="mailto:antoningrillet@asmix.fr"
-															className="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline truncate block"
-														>
-															antoningrillet@asmix.fr
-														</a>
-													</div>
-												</div>
-											</motion.div>
+    window.addEventListener("keydown", onKeyDown);
+    window.setTimeout(() => firstFieldRef.current?.focus(), 40);
 
-											<motion.div
-												initial={{ opacity: 0, x: 20 }}
-												animate={{ opacity: 1, x: 0 }}
-												transition={{ delay: 0.2 }}
-												className="group relative overflow-hidden"
-											>
-												<div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-purple-600/10 rounded-xl transition-all group-hover:from-purple-500/20 group-hover:to-purple-600/20" />
-												<div className="relative flex items-center gap-4 p-5 rounded-xl border border-purple-200/50 dark:border-purple-800/50 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-sm transition-all group-hover:border-purple-300 dark:group-hover:border-purple-700 group-hover:shadow-lg">
-													<div className="p-3 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg">
-														<Phone className="h-5 w-5 text-white" />
-													</div>
-													<div className="min-w-0 flex-1">
-														<p className="text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1 uppercase tracking-wider">
-															Téléphone
-														</p>
-														<a
-															href="tel:0760458997"
-															className="text-sm font-semibold text-purple-600 dark:text-purple-400 hover:underline"
-														>
-															07 60 45 89 97
-														</a>
-													</div>
-												</div>
-											</motion.div>
-										</div>
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [isOpen, onClose]);
 
-										{/* Form */}
-										<form onSubmit={handleSubmit} className="space-y-5">
-											<div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-												<motion.div
-													initial={{ opacity: 0, y: 10 }}
-													animate={{ opacity: 1, y: 0 }}
-													transition={{ delay: 0.3 }}
-												>
-													<label
-														htmlFor="name"
-														className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-2"
-													>
-														Nom *
-													</label>
-													<div className="relative group">
-														<User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
-														<input
-															type="text"
-															id="name"
-															name="name"
-															required
-															value={formData.name}
-															onChange={handleChange}
-															className="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 transition-all placeholder:text-zinc-400"
-															placeholder="Votre nom"
-														/>
-													</div>
-												</motion.div>
-												<motion.div
-													initial={{ opacity: 0, y: 10 }}
-													animate={{ opacity: 1, y: 0 }}
-													transition={{ delay: 0.4 }}
-												>
-													<label
-														htmlFor="email"
-														className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-2"
-													>
-														Email *
-													</label>
-													<div className="relative group">
-														<Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
-														<input
-															type="email"
-															id="email"
-															name="email"
-															required
-															value={formData.email}
-															onChange={handleChange}
-															className="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 transition-all placeholder:text-zinc-400"
-															placeholder="votre@email.com"
-														/>
-													</div>
-												</motion.div>
-											</div>
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setStatus("loading");
+    setErrorMessage("");
 
-											<motion.div
-												initial={{ opacity: 0, y: 10 }}
-												animate={{ opacity: 1, y: 0 }}
-												transition={{ delay: 0.5 }}
-											>
-												<label
-													htmlFor="phone"
-													className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-2"
-												>
-													Téléphone <span className="text-zinc-400 font-normal">(optionnel)</span>
-												</label>
-												<div className="relative group">
-													<Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
-													<input
-														type="tel"
-														id="phone"
-														name="phone"
-														value={formData.phone}
-														onChange={handleChange}
-														className="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 transition-all placeholder:text-zinc-400"
-														placeholder="06 12 34 56 78"
-													/>
-												</div>
-											</motion.div>
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-											<motion.div
-												initial={{ opacity: 0, y: 10 }}
-												animate={{ opacity: 1, y: 0 }}
-												transition={{ delay: 0.6 }}
-											>
-												<label
-													htmlFor="message"
-													className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-2"
-												>
-													Message *
-												</label>
-												<div className="relative group">
-													<MessageSquare className="absolute left-4 top-4 h-5 w-5 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
-													<textarea
-														id="message"
-														name="message"
-														required
-														value={formData.message}
-														onChange={handleChange}
-														rows={5}
-														className="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500 transition-all resize-none placeholder:text-zinc-400"
-														placeholder="Décrivez votre projet ou votre demande..."
-													/>
-												</div>
-											</motion.div>
+      const payload = await response.json().catch(() => null);
 
-											{status === "error" && (
-												<motion.div
-													initial={{ opacity: 0, y: -10 }}
-													animate={{ opacity: 1, y: 0 }}
-													className="p-4 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-xl"
-												>
-													<p className="text-sm font-medium text-red-700 dark:text-red-400">
-														{errorMessage}
-													</p>
-												</motion.div>
-											)}
+      if (!response.ok) {
+        throw new Error(payload?.error || "Erreur lors de l'envoi du message");
+      }
 
-											<div className="flex gap-4 pt-4">
-												<motion.button
-													initial={{ opacity: 0, y: 10 }}
-													animate={{ opacity: 1, y: 0 }}
-													transition={{ delay: 0.7 }}
-													type="button"
-													onClick={onClose}
-													className="flex-1 px-6 py-3.5 rounded-xl border-2 border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 transition-all hover:scale-[1.02]"
-												>
-													Annuler
-												</motion.button>
-												<motion.button
-													initial={{ opacity: 0, y: 10 }}
-													animate={{ opacity: 1, y: 0 }}
-													transition={{ delay: 0.8 }}
-													type="submit"
-													disabled={status === "loading"}
-													className="flex-1 px-6 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2 hover:scale-[1.02]"
-												>
-													{status === "loading" ? (
-														<>
-															<Loader2 className="h-5 w-5 animate-spin" />
-															Envoi en cours...
-														</>
-													) : (
-														<>
-															<Send className="h-5 w-5" />
-															Envoyer
-														</>
-													)}
-												</motion.button>
-											</div>
-										</form>
-									</>
-								)}
-							</div>
-						</motion.div>
-					</div>
-				</>
-			)}
-		</AnimatePresence>
-	);
+      setStatus("success");
+      setFormData({ name: "", email: "", phone: "", message: "" });
+
+      window.setTimeout(() => {
+        onClose();
+        setStatus("idle");
+      }, 1800);
+    } catch (error) {
+      setStatus("error");
+      setErrorMessage(
+        error instanceof Error ? error.message : "Une erreur est survenue",
+      );
+    }
+  };
+
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setFormData((previous) => ({
+      ...previous,
+      [event.target.name]: event.target.value,
+    }));
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 z-50 bg-[#040507]/70 backdrop-blur-xl"
+          />
+
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              ref={dialogRef}
+              initial={
+                shouldReduceMotion
+                  ? { opacity: 0 }
+                  : { opacity: 0, y: 28, scale: 0.98 }
+              }
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={
+                shouldReduceMotion
+                  ? { opacity: 0 }
+                  : { opacity: 0, y: 24, scale: 0.98 }
+              }
+              transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="contact-modal-title"
+              className="glass-panel relative w-full max-w-3xl overflow-hidden rounded-[1.5rem] border border-white/60"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.22),transparent_34%,rgba(255,255,255,0.08)_100%)] pointer-events-none" />
+
+              <div className="relative border-b border-zinc-200/70 px-6 py-5 sm:px-8">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.34em] text-zinc-500">
+                      Contact
+                    </p>
+                    <h2
+                      id="contact-modal-title"
+                      className="mt-3 text-2xl font-semibold text-zinc-950"
+                    >
+                      Parlons du produit.
+                    </h2>
+                    <p className="mt-2 max-w-xl text-base leading-7 text-zinc-600">
+                      Donnez-moi le contexte, l'objectif et le niveau de
+                      finition que vous visez. Je vous réponds rapidement.
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={onClose}
+                    type="button"
+                    className="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-zinc-200 bg-white/70 text-zinc-700 transition-colors duration-200 hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    aria-label="Fermer"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="relative max-h-[82vh] overflow-y-auto px-6 py-6 scrollbar-thin scrollbar-thumb-zinc-300 scrollbar-track-transparent sm:px-8">
+                {status === "success" ? (
+                  <div
+                    className="flex min-h-[360px] flex-col items-center justify-center text-center"
+                    aria-live="polite"
+                  >
+                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-emerald-500 text-white shadow-[0_24px_50px_rgba(16,185,129,0.28)]">
+                      <CheckCircle className="h-9 w-9" />
+                    </div>
+                    <h3 className="mt-6 text-3xl font-semibold text-zinc-950">
+                      Message envoyé
+                    </h3>
+                    <p className="mt-3 max-w-md text-base leading-7 text-zinc-600">
+                      Merci. Je reviens vers vous rapidement avec une réponse
+                      claire et des prochaines étapes concrètes.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr]">
+                    <div className="space-y-4">
+                      <div className="rounded-[1.25rem] border border-zinc-200 bg-white/[0.76] p-5 shadow-[0_20px_40px_rgba(15,23,42,0.05)]">
+                        <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-950 text-white">
+                          <Mail className="h-5 w-5" />
+                        </div>
+                        <p className="mt-4 text-xs font-semibold uppercase tracking-[0.28em] text-zinc-500">
+                          Email
+                        </p>
+                        <a
+                          href="mailto:antoningrillet@asmix.fr"
+                          className="mt-2 block text-lg font-medium text-zinc-950 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          antoningrillet@asmix.fr
+                        </a>
+                      </div>
+
+                      <div className="rounded-[1.25rem] border border-zinc-200 bg-white/[0.76] p-5 shadow-[0_20px_40px_rgba(15,23,42,0.05)]">
+                        <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-950 text-white">
+                          <Phone className="h-5 w-5" />
+                        </div>
+                        <p className="mt-4 text-xs font-semibold uppercase tracking-[0.28em] text-zinc-500">
+                          Téléphone
+                        </p>
+                        <a
+                          href="tel:0760458997"
+                          className="mt-2 block text-lg font-medium text-zinc-950 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          07 60 45 89 97
+                        </a>
+                      </div>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                      <div className="grid gap-5 md:grid-cols-2">
+                        <label className="block">
+                          <span className="mb-2 block text-sm font-semibold text-zinc-700">
+                            Nom
+                          </span>
+                          <div className="relative">
+                            <User className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                            <input
+                              ref={firstFieldRef}
+                              type="text"
+                              id="name"
+                              name="name"
+                              required
+                              autoComplete="name"
+                              value={formData.name}
+                              onChange={handleChange}
+                              className="w-full rounded-xl border border-zinc-200 bg-white px-12 py-3.5 text-zinc-950 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              placeholder="Votre nom"
+                            />
+                          </div>
+                        </label>
+
+                        <label className="block">
+                          <span className="mb-2 block text-sm font-semibold text-zinc-700">
+                            Email
+                          </span>
+                          <div className="relative">
+                            <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                            <input
+                              type="email"
+                              id="email"
+                              name="email"
+                              required
+                              autoComplete="email"
+                              value={formData.email}
+                              onChange={handleChange}
+                              className="w-full rounded-xl border border-zinc-200 bg-white px-12 py-3.5 text-zinc-950 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              placeholder="vous@email.com"
+                            />
+                          </div>
+                        </label>
+                      </div>
+
+                      <label className="block">
+                        <span className="mb-2 block text-sm font-semibold text-zinc-700">
+                          Téléphone
+                        </span>
+                        <div className="relative">
+                          <Phone className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                          <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            autoComplete="tel"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            className="w-full rounded-xl border border-zinc-200 bg-white px-12 py-3.5 text-zinc-950 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="06 12 34 56 78"
+                          />
+                        </div>
+                      </label>
+
+                      <label className="block">
+                        <span className="mb-2 block text-sm font-semibold text-zinc-700">
+                          Contexte du projet
+                        </span>
+                        <div className="relative">
+                          <MessageSquare className="pointer-events-none absolute left-4 top-4 h-4 w-4 text-zinc-400" />
+                          <textarea
+                            id="message"
+                            name="message"
+                            required
+                            rows={6}
+                            value={formData.message}
+                            onChange={handleChange}
+                            className="w-full rounded-xl border border-zinc-200 bg-white px-12 py-3.5 text-zinc-950 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                            placeholder="Quel produit voulez-vous lancer, améliorer ou repositionner ?"
+                          />
+                        </div>
+                      </label>
+
+                      {status === "error" && (
+                        <div
+                          className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700"
+                          aria-live="polite"
+                        >
+                          {errorMessage}
+                        </div>
+                      )}
+
+                      <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+                        <button
+                          type="button"
+                          onClick={onClose}
+                          className="inline-flex cursor-pointer items-center justify-center rounded-full border border-zinc-200 bg-white px-5 py-3.5 text-sm font-semibold text-zinc-700 transition-colors duration-200 hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          Annuler
+                        </button>
+                        <button
+                          type="submit"
+                          disabled={status === "loading"}
+                          className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full bg-zinc-950 px-6 py-3.5 text-sm font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          {status === "loading" ? (
+                            <>
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                              Envoi...
+                            </>
+                          ) : (
+                            <>
+                              <Send className="h-4 w-4" />
+                              Envoyer
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        </>
+      )}
+    </AnimatePresence>
+  );
 }

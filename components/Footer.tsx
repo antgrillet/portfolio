@@ -1,14 +1,35 @@
 export function Footer() {
-	const currentYear = new Date().getFullYear();
+  const currentYear = new Date().getFullYear();
 
-	return (
-		<footer className="py-8 bg-gradient-to-r from-zinc-900 via-blue-900 to-purple-900 dark:from-zinc-950 dark:via-blue-950 dark:to-purple-950 border-t border-zinc-800 dark:border-zinc-700">
-			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-				<p className="text-zinc-300 dark:text-zinc-400">
-					© {currentYear} Antonin Grillet. Tous droits réservés. Déployé avec
-					💜 sur Vercel.
-				</p>
-			</div>
-		</footer>
-	);
+  return (
+    <footer className="border-t border-white/8 bg-[#040507] px-4 py-8 text-zinc-400 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-7xl flex-col gap-3 text-sm md:flex-row md:items-center md:justify-between">
+        <p>© {currentYear} Antonin Grillet. Portfolio React / Next.js.</p>
+        <div className="flex flex-wrap items-center gap-4">
+          <a
+            href="mailto:antoningrillet@asmix.fr"
+            className="cursor-pointer transition-colors duration-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            antoningrillet@asmix.fr
+          </a>
+          <a
+            href="https://github.com/antoningrillet"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="cursor-pointer transition-colors duration-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            GitHub
+          </a>
+          <a
+            href="https://linkedin.com/in/antoningrillet"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="cursor-pointer transition-colors duration-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            LinkedIn
+          </a>
+        </div>
+      </div>
+    </footer>
+  );
 }

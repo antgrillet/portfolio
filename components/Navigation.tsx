@@ -1,163 +1,186 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
-import { Menu, X } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 
 const navItems = [
-	{ label: "Accueil", href: "#hero" },
-	{ label: "Parcours", href: "#parcours" },
-	{ label: "Projets", href: "#projects" },
-	{ label: "Technologies", href: "#tech" },
-	{ label: "Contact", href: "#contact" },
+  { label: "Projets", href: "#projects" },
+  { label: "Parcours", href: "#parcours" },
+
+  { label: "Stack", href: "#tech" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export function Navigation() {
-	const [isMenuOpen, setIsMenuOpen] = useState(false);
-	const [activeSection, setActiveSection] = useState("hero");
-	const shouldReduceMotion = useReducedMotion();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("hero");
+  const shouldReduceMotion = useReducedMotion();
 
-	useEffect(() => {
-		const handleScroll = () => {
-			const sections = navItems.map((item) => item.href.slice(1));
-			const scrollPosition = window.scrollY + 100;
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ["hero", ...navItems.map((item) => item.href.slice(1))];
+      const scrollPosition = window.scrollY + window.innerHeight * 0.24;
 
-			for (let i = sections.length - 1; i >= 0; i--) {
-				const section = document.getElementById(sections[i]);
-				if (section && section.offsetTop <= scrollPosition) {
-					setActiveSection(sections[i]);
-					break;
-				}
-			}
-		};
+      for (let i = sections.length - 1; i >= 0; i -= 1) {
+        const section = document.getElementById(sections[i]);
+        if (section && section.offsetTop <= scrollPosition) {
+          setActiveSection(sections[i]);
+          break;
+        }
+      }
+    };
 
-		window.addEventListener("scroll", handleScroll, { passive: true });
-		handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
 
-		return () => window.removeEventListener("scroll", handleScroll);
-	}, []);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-	return (
-		<>
-			{/* Skip to main content - Accessibilité */}
-			<a
-				href="#hero"
-				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg"
-			>
-				Aller au contenu principal
-			</a>
+  const scrollToContact = () => {
+    document.getElementById("contact")?.scrollIntoView({
+      behavior: shouldReduceMotion ? "auto" : "smooth",
+    });
+    setIsMenuOpen(false);
+  };
 
-			<motion.nav
-				initial={shouldReduceMotion ? { opacity: 0 } : { y: -100 }}
-				animate={shouldReduceMotion ? { opacity: 1 } : { y: 0 }}
-				className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800"
-				role="navigation"
-				aria-label="Navigation principale"
-			>
-				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-					<div className="flex items-center justify-between h-16">
-						<motion.a
-							href="#hero"
-							initial={{ opacity: 0 }}
-							animate={{ opacity: 1 }}
-							transition={{ delay: 0.2 }}
-							className="text-xl font-bold text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg px-2 py-1"
-							aria-label="Antonin Grillet - Retour à l'accueil"
-						>
-							AG.
-						</motion.a>
+  return (
+    <>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-zinc-950 focus:px-4 focus:py-2 focus:text-white"
+      >
+        Aller au contenu principal
+      </a>
 
-						{/* Desktop Navigation */}
-						<div className="hidden md:block">
-							<div className="flex items-center space-x-1">
-								{navItems.map((item, index) => {
-									const isActive =
-										activeSection === item.href.slice(1);
-									return (
-										<motion.a
-											key={item.label}
-											href={item.href}
-											initial={
-												shouldReduceMotion
-													? { opacity: 0 }
-													: { opacity: 0, y: -20 }
-											}
-											animate={{ opacity: 1, y: 0 }}
-											transition={{ delay: 0.1 * (index + 1) }}
-											className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-												isActive
-													? "text-blue-600 dark:text-blue-400"
-													: "text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100"
-											}`}
-											aria-current={isActive ? "page" : undefined}
-										>
-											{item.label}
-											{isActive && (
-												<motion.div
-													layoutId="activeSection"
-													className="absolute inset-0 bg-blue-100 dark:bg-blue-900/30 rounded-lg -z-10"
-													transition={{
-														type: "spring",
-														bounce: 0.2,
-														duration: 0.6,
-													}}
-												/>
-											)}
-										</motion.a>
-									);
-								})}
-							</div>
-						</div>
+      <motion.nav
+        initial={shouldReduceMotion ? { opacity: 0 } : { y: -24, opacity: 0 }}
+        animate={shouldReduceMotion ? { opacity: 1 } : { y: 0, opacity: 1 }}
+        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        className="fixed inset-x-0 top-4 z-50 px-3 sm:px-6"
+        role="navigation"
+        aria-label="Navigation principale"
+      >
+        <div className="glass-panel mx-auto flex max-w-6xl items-center justify-between rounded-full px-3 py-2 text-zinc-900">
+          <div className="flex items-center gap-3">
+            <motion.a
+              href="#hero"
+              initial={shouldReduceMotion ? undefined : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.14 }}
+              className="cursor-pointer rounded-full px-3 py-2 text-sm font-semibold uppercase tracking-[0.24em] text-zinc-950 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              aria-label="Antonin Grillet - Retour à l'accueil"
+            >
+              Antonin
+            </motion.a>
+            <span className="hidden rounded-full border border-zinc-200/80 bg-white/70 px-3 py-1 text-[0.68rem] font-medium uppercase tracking-[0.24em] text-zinc-500 md:inline-flex">
+              React / Next.js / Motion
+            </span>
+          </div>
 
-						{/* Mobile menu button */}
-						<button
-							onClick={() => setIsMenuOpen(!isMenuOpen)}
-							className="md:hidden p-2 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg"
-							aria-expanded={isMenuOpen}
-							aria-controls="mobile-menu"
-							aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
-						>
-							{isMenuOpen ? (
-								<X className="h-6 w-6" />
-							) : (
-								<Menu className="h-6 w-6" />
-							)}
-						</button>
-					</div>
-				</div>
+          <div className="hidden items-center gap-1 md:flex">
+            {navItems.map((item, index) => {
+              const isActive = activeSection === item.href.slice(1);
+              return (
+                <motion.a
+                  key={item.label}
+                  href={item.href}
+                  initial={
+                    shouldReduceMotion ? undefined : { opacity: 0, y: -10 }
+                  }
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.08 * (index + 1) }}
+                  className={`relative cursor-pointer rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                    isActive
+                      ? "text-zinc-950"
+                      : "text-zinc-600 hover:text-zinc-950"
+                  }`}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  {item.label}
+                  {isActive && (
+                    <motion.span
+                      layoutId="floating-nav-pill"
+                      className="absolute inset-0 -z-10 rounded-full bg-white/95 shadow-[0_10px_30px_rgba(15,23,42,0.08)]"
+                      transition={{
+                        type: "spring",
+                        bounce: 0.18,
+                        duration: 0.5,
+                      }}
+                    />
+                  )}
+                </motion.a>
+              );
+            })}
+            <button
+              onClick={scrollToContact}
+              className="ml-2 inline-flex cursor-pointer items-center gap-2 rounded-full bg-zinc-950 px-4 py-2.5 text-sm font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Parler de votre projet
+              <ArrowUpRight className="h-4 w-4" />
+            </button>
+          </div>
 
-				{/* Mobile menu */}
-				{isMenuOpen && (
-					<motion.div
-						id="mobile-menu"
-						initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, height: 0 }}
-						animate={{ opacity: 1, height: "auto" }}
-						exit={{ opacity: 0, height: 0 }}
-						className="md:hidden bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800"
-					>
-						<div className="px-2 pt-2 pb-3 space-y-1">
-							{navItems.map((item) => {
-								const isActive = activeSection === item.href.slice(1);
-								return (
-									<a
-										key={item.label}
-										href={item.href}
-										onClick={() => setIsMenuOpen(false)}
-										className={`block px-3 py-2 rounded-lg text-base font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-											isActive
-												? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
-												: "text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800"
-										}`}
-										aria-current={isActive ? "page" : undefined}
-									>
-										{item.label}
-									</a>
-								);
-							})}
-						</div>
-					</motion.div>
-				)}
-			</motion.nav>
-		</>
-	);
+          <button
+            onClick={() => setIsMenuOpen((open) => !open)}
+            className="inline-flex cursor-pointer rounded-full p-3 text-zinc-700 transition-colors hover:text-zinc-950 focus:outline-none focus:ring-2 focus:ring-blue-500 md:hidden"
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-menu"
+            aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          >
+            {isMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </button>
+        </div>
+
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              id="mobile-menu"
+              initial={
+                shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 }
+              }
+              animate={{ opacity: 1, y: 0 }}
+              exit={
+                shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 }
+              }
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              className="glass-panel mx-auto mt-3 max-w-6xl rounded-[1.25rem] p-3 md:hidden"
+            >
+              <div className="flex flex-col gap-1">
+                {navItems.map((item) => {
+                  const isActive = activeSection === item.href.slice(1);
+                  return (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`cursor-pointer rounded-xl px-4 py-3 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        isActive
+                          ? "bg-zinc-950 text-white"
+                          : "text-zinc-700 hover:bg-white/80"
+                      }`}
+                      aria-current={isActive ? "page" : undefined}
+                    >
+                      {item.label}
+                    </a>
+                  );
+                })}
+                <button
+                  onClick={scrollToContact}
+                  className="mt-2 inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-zinc-950 px-4 py-3 text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  Parler de votre projet
+                  <ArrowUpRight className="h-4 w-4" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.nav>
+    </>
+  );
 }
