@@ -69,35 +69,41 @@ export function ProjectsSection({ onContactClick }: ProjectsSectionProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-10 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between"
+          className="mb-10 flex flex-col gap-8 lg:mb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-8"
         >
           <div className="max-w-3xl">
-            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.34em] text-blue-200/70">
+            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.34em] text-blue-200/70 sm:text-xs lg:mb-4">
               Projets
             </p>
-            <h2 className="text-balance text-[clamp(2rem,3.6vw,3.6rem)] leading-[0.94] font-semibold">
+            <h2 className="text-balance text-[clamp(1.875rem,6vw,3.6rem)] leading-[1.15] font-semibold sm:leading-[0.94]">
               Quelques projets récents.
             </h2>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-zinc-300">
+            <p className="mt-5 max-w-2xl text-[13px] leading-[1.75] text-zinc-300 min-[420px]:text-sm sm:mt-5 sm:text-lg sm:leading-8">
               Des sites et applications développés pour des clients ou des
               projets personnels.
             </p>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             {[
               { value: `${projects.length || 9}`, label: "Projets exposés" },
               { value: "100%", label: "Code sur mesure" },
               { value: "Next.js", label: "Stack principale" },
-            ].map((item) => (
+            ].map((item, index) => (
               <div
                 key={item.label}
-                className="rounded-[1.15rem] border border-white/10 bg-white/[0.06] px-5 py-5 backdrop-blur-md transition-colors duration-300 hover:bg-white/[0.1]"
+                className={`flex rounded-[1rem] border border-white/10 bg-white/[0.06] p-5 backdrop-blur-md transition-colors duration-300 hover:bg-white/[0.1] sm:rounded-[1.15rem] ${
+                  index === 2 ? "col-span-2 sm:col-span-1" : ""
+                }`}
               >
-                <div className="text-xl font-semibold text-white">
+                <div className="text-lg font-semibold text-white sm:text-xl">
                   {item.value}
                 </div>
-                <div className="mt-1 text-sm text-zinc-400">{item.label}</div>
+                <div className={`text-xs text-zinc-400 sm:mt-1 sm:text-sm ${
+                  index === 2 ? "ml-auto mt-0 sm:ml-0" : "mt-1"
+                }`}>
+                  {item.label}
+                </div>
               </div>
             ))}
           </div>

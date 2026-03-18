@@ -148,35 +148,44 @@ export function Navigation() {
                 shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 }
               }
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="glass-panel mx-auto mt-3 max-w-6xl rounded-[1.25rem] p-3 md:hidden"
+              className="mx-auto mt-3 flex max-w-6xl flex-col gap-px overflow-hidden rounded-[1.25rem] border border-[#DCE5F6] bg-[#DCE5F6] shadow-[0_30px_60px_-20px_rgba(31,79,215,0.08)] max-[419px]:rounded-[1.1rem] md:hidden"
             >
-              <div className="flex flex-col gap-1">
-                {navItems.map((item) => {
-                  const isActive = activeSection === item.href.slice(1);
-                  return (
-                    <a
-                      key={item.label}
-                      href={item.href}
-                      onClick={() => setIsMenuOpen(false)}
-                      className={`cursor-pointer rounded-xl px-4 py-3 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        isActive
-                          ? "bg-zinc-950 text-white"
-                          : "text-zinc-700 hover:bg-white/80"
+              {navItems.map((item) => {
+                const isActive = activeSection === item.href.slice(1);
+                return (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="group flex cursor-pointer items-center justify-between bg-white px-6 py-4 transition-colors hover:bg-[#F6F9FF] focus:bg-[#F6F9FF] focus:outline-none focus:ring-2 focus:ring-blue-500 max-[419px]:px-5 max-[419px]:py-3.5"
+                    aria-current={isActive ? "page" : undefined}
+                  >
+                    <span
+                      className={`text-xs font-medium transition-colors ${
+                        isActive ? "text-[#1F4FD7]" : "text-[#111111]"
                       }`}
-                      aria-current={isActive ? "page" : undefined}
                     >
                       {item.label}
-                    </a>
-                  );
-                })}
-                <button
-                  onClick={scrollToContact}
-                  className="mt-2 inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-zinc-950 px-4 py-3 text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  Parler de votre projet
-                  <ArrowUpRight className="h-4 w-4" />
-                </button>
-              </div>
+                    </span>
+                    <span
+                      className={`text-[10px] transition-colors duration-300 group-hover:text-[#1F4FD7] ${
+                        isActive ? "text-[#1F4FD7]" : "text-[#8CA2CE]"
+                      }`}
+                    >
+                      {isActive ? "↓" : "↗"}
+                    </span>
+                  </a>
+                );
+              })}
+              <button
+                onClick={scrollToContact}
+                className="group flex w-full cursor-pointer items-center justify-between bg-[#1F4FD7] px-6 py-5 text-white transition-colors hover:bg-[#1238A5] focus:outline-none focus:ring-2 focus:ring-blue-500 max-[419px]:px-5 max-[419px]:py-4"
+              >
+                <span className="text-xs font-medium">Parler de votre projet</span>
+                <span className="text-[10px] text-white/75 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-white">
+                  →
+                </span>
+              </button>
             </motion.div>
           )}
         </AnimatePresence>

@@ -55,58 +55,58 @@ export function HeroSection({ onContactClick }: HeroSectionProps) {
           style={shouldReduceMotion ? undefined : { y: copyY }}
           className="mx-auto max-w-5xl text-center"
         >
-          <div className="mb-6 flex flex-wrap items-center justify-center gap-3 text-[0.72rem] font-medium uppercase tracking-[0.28em] text-zinc-500">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/70 px-4 py-2 shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
+          <div className="mb-5 flex flex-col items-center justify-center gap-2 text-[0.65rem] font-medium uppercase tracking-[0.28em] text-zinc-500 max-[419px]:text-[0.6rem] max-[419px]:tracking-[0.22em] sm:mb-6 sm:flex-row sm:gap-3 sm:text-[0.72rem]">
+            <span className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/70 bg-white/70 px-4 py-2 shadow-[0_16px_40px_rgba(15,23,42,0.06)] max-[419px]:px-3.5 max-[419px]:py-1.5 sm:w-auto">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500/60" />
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
               </span>
               Disponible pour freelance
             </span>
-            <span className="inline-flex items-center gap-2 rounded-full border border-zinc-200/80 bg-white/55 px-4 py-2">
+            <span className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-zinc-200/80 bg-white/55 px-4 py-2 max-[419px]:px-3.5 max-[419px]:py-1.5 sm:w-auto">
               <Sparkles className="h-3.5 w-3.5 text-blue-600" />
               Portfolio
             </span>
           </div>
 
-          <p className="mb-5 text-sm font-medium uppercase tracking-[0.36em] text-zinc-500">
+          <p className="mb-4 text-xs font-medium uppercase tracking-[0.36em] text-zinc-500 max-[419px]:tracking-[0.28em] sm:mb-5 sm:text-sm">
             Antonin Grillet · React / Next.js / Motion design
           </p>
-          <h1 className="text-gradient-hero text-balance text-[clamp(2.2rem,5.5vw,4rem)] leading-[0.94] font-semibold">
+          <h1 className="text-gradient-hero text-balance text-[clamp(2.15rem,5.5vw,4rem)] leading-[1.1] font-semibold max-[419px]:text-[clamp(2rem,10vw,2.6rem)] md:leading-[0.94]">
             Développeur front-end, orienté interface et mouvement.
           </h1>
-          <p className="mx-auto mt-8 max-w-3xl text-balance text-base leading-7 text-zinc-600 sm:text-lg md:text-xl md:leading-8">
+          <p className="mx-auto mt-6 max-w-3xl text-balance text-sm leading-relaxed text-zinc-600 sm:mt-8 sm:text-base sm:leading-7 md:text-xl md:leading-8">
             Je conçois et développe des sites et applications web avec React,
             Next.js et TypeScript. Sensible au détail, au mouvement et à la
             clarté de l&apos;interface.
           </p>
 
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 max-[419px]:gap-2.5 sm:mt-10 sm:flex-row sm:gap-4">
             <button
               onClick={onContactClick}
-              className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-zinc-950 px-7 py-4 text-sm font-semibold text-white shadow-[0_24px_50px_rgba(15,23,42,0.18)] transition-transform duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-zinc-950 px-7 py-3.5 text-sm font-semibold text-white shadow-[0_24px_50px_rgba(15,23,42,0.18)] transition-transform duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 max-[419px]:px-5 max-[419px]:py-3 sm:w-auto sm:py-4"
             >
               Me contacter
               <ArrowRight className="h-4 w-4" />
             </button>
             <button
               onClick={scrollToProjects}
-              className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-zinc-300/80 bg-white/70 px-7 py-4 text-sm font-semibold text-zinc-900 shadow-[0_20px_40px_rgba(15,23,42,0.06)] transition-colors duration-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-zinc-300/80 bg-white/70 px-7 py-3.5 text-sm font-semibold text-zinc-900 shadow-[0_20px_40px_rgba(15,23,42,0.06)] transition-colors duration-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 max-[419px]:px-5 max-[419px]:py-3 sm:w-auto sm:py-4"
             >
               Voir les réalisations
               <ArrowRight className="h-4 w-4" />
             </button>
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2 max-[419px]:grid max-[419px]:w-full max-[419px]:grid-cols-2 max-[419px]:gap-2 sm:mt-8 sm:gap-3">
             <a
               href="https://github.com/antoningrillet"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Profil GitHub"
-              className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-zinc-200 bg-white/60 px-4 py-2 text-sm font-medium text-zinc-600 transition-colors duration-200 hover:bg-white hover:text-zinc-950 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-full border border-zinc-200 bg-white/60 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors duration-200 hover:bg-white hover:text-zinc-950 focus:outline-none focus:ring-2 focus:ring-blue-500 max-[419px]:w-full max-[419px]:px-2.5 sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
             >
-              <Github className="h-4 w-4" />
+              <Github className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               GitHub
             </a>
             <a
@@ -114,17 +114,17 @@ export function HeroSection({ onContactClick }: HeroSectionProps) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Profil LinkedIn"
-              className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-zinc-200 bg-white/60 px-4 py-2 text-sm font-medium text-zinc-600 transition-colors duration-200 hover:bg-white hover:text-zinc-950 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-full border border-zinc-200 bg-white/60 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors duration-200 hover:bg-white hover:text-zinc-950 focus:outline-none focus:ring-2 focus:ring-blue-500 max-[419px]:w-full max-[419px]:px-2.5 sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
             >
-              <Linkedin className="h-4 w-4" />
+              <Linkedin className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               LinkedIn
             </a>
             <a
               href="mailto:antoningrillet@asmix.fr"
               aria-label="Envoyer un email"
-              className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-zinc-200 bg-white/60 px-4 py-2 text-sm font-medium text-zinc-600 transition-colors duration-200 hover:bg-white hover:text-zinc-950 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-full border border-zinc-200 bg-white/60 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors duration-200 hover:bg-white hover:text-zinc-950 focus:outline-none focus:ring-2 focus:ring-blue-500 max-[419px]:col-span-2 max-[419px]:w-full max-[419px]:px-2.5 sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
             >
-              <Mail className="h-4 w-4" />
+              <Mail className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               antoningrillet@asmix.fr
             </a>
           </div>
