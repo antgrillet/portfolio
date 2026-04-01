@@ -1,0 +1,54 @@
+/* Showcase Ruby — mosaïque (port du livrable), scoping */
+.ruby-showcase {
+  --ruby-bg: #f0f0f0;
+  --ruby-fg: #1a1a1a;
+  background: var(--ruby-bg);
+  color: var(--ruby-fg);
+  min-height: 100%;
+}
+
+.ruby-showcase h1,
+.ruby-showcase h2,
+.ruby-showcase h3,
+.ruby-showcase h4 {
+  font-family: var(--font-fraunces), Georgia, serif;
+}
+
+.ruby-showcase p,
+.ruby-showcase a,
+.ruby-showcase span,
+.ruby-showcase li,
+.ruby-showcase label,
+.ruby-showcase input,
+.ruby-showcase textarea,
+.ruby-showcase button {
+  font-family: var(--font-lato), system-ui, sans-serif;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ruby-showcase * {
+    cursor: none !important;
+  }
+}
+
+@keyframes ruby-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ruby-showcase .ruby-animate-marquee {
+  animation: ruby-marquee 25s linear infinite;
+}
+.ruby-showcase .ruby-animate-marquee-slow {
+  animation: ruby-marquee 45s linear infinite;
+}
+.ruby-showcase .ruby-animate-marquee-fast {
+  animation: ruby-marquee 15s linear infinite;
+}
+.ruby-showcase .ruby-animate-marquee-reverse {
+  animation: ruby-marquee 25s linear infinite reverse;
+}
