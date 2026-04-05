@@ -72,7 +72,7 @@ export function TechStackSection({ onContactClick }: TechStackSectionProps) {
       id="tech"
       className="relative overflow-hidden px-4 py-16 sm:px-6 lg:px-8"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,252,248,0.5),rgba(235,227,214,0.92))]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.4),rgba(245,245,247,0.88))]" />
       <div className="relative mx-auto max-w-7xl">
         <motion.div
           initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
@@ -81,10 +81,10 @@ export function TechStackSection({ onContactClick }: TechStackSectionProps) {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mb-10 max-w-3xl"
         >
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.34em] text-[#b84328]">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.34em] text-zinc-500">
             L&apos;approche technique
           </p>
-          <h2 className="font-display text-balance text-[clamp(1.8rem,3.2vw,3.2rem)] leading-[0.98] font-semibold text-zinc-950">
+          <h2 className="text-balance text-[clamp(1.8rem,3.2vw,3.2rem)] leading-[0.96] font-semibold text-zinc-950">
             Des outils modernes au service de vos objectifs.
           </h2>
           <p className="mt-5 text-lg leading-8 text-zinc-600">
@@ -108,7 +108,7 @@ export function TechStackSection({ onContactClick }: TechStackSectionProps) {
               }}
               className="glass-panel rounded-[1.25rem] p-5"
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#c24b2b_0%,#a83a1f_100%)] text-white shadow-[0_20px_40px_rgba(194,75,43,0.22)]">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-950 text-white shadow-[0_20px_40px_rgba(15,23,42,0.12)]">
                 <pillar.icon className="h-5 w-5" />
               </div>
               <h3 className="mt-5 text-xl font-semibold text-zinc-950">
@@ -136,7 +136,7 @@ export function TechStackSection({ onContactClick }: TechStackSectionProps) {
               className="rounded-[1.25rem] border border-white/70 bg-white/[0.88] p-5 shadow-[0_24px_50px_rgba(15,23,42,0.06)]"
             >
               <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-orange-50 text-[#b84328]">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-50 text-blue-700">
                   <category.icon className="h-5 w-5" />
                 </div>
                 <h3 className="text-lg font-semibold text-zinc-950">
@@ -167,7 +167,7 @@ export function TechStackSection({ onContactClick }: TechStackSectionProps) {
           <button
             type="button"
             onClick={onContactClick}
-            className="btn-editorial-solid inline-flex cursor-pointer items-center gap-2 px-7 py-4 text-sm transition-transform duration-300 hover:-translate-y-0.5"
+            className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-zinc-950 px-7 py-4 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <Mail className="h-4 w-4" />
             Discuter du projet

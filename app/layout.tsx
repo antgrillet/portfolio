@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Geist_Mono, Space_Grotesk } from "next/font/google";
+import { Archivo, Geist_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
-const displayFont = Fraunces({
+const displayFont = Archivo({
   variable: "--font-display",
   subsets: ["latin"],
 });
@@ -91,7 +91,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f6f1e8" },
+    { media: "(prefers-color-scheme: light)", color: "#f5f5f7" },
     { media: "(prefers-color-scheme: dark)", color: "#05070b" },
   ],
   width: "device-width",
