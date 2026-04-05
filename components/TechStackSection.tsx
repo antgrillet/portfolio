@@ -19,18 +19,18 @@ interface TechStackSectionProps {
 const craftPillars = [
   {
     icon: Layers3,
-    title: "Systèmes",
-    copy: "Des composants réutilisables et une architecture front-end structurée.",
+    title: "Évolutivité",
+    copy: "Un code propre et structuré pour faire évoluer votre site plus facilement sans repartir de zéro.",
   },
   {
     icon: Sparkles,
-    title: "Mouvement",
-    copy: "Des animations avec Framer Motion pour rendre la navigation plus fluide.",
+    title: "Expérience fluide",
+    copy: "Des interfaces réactives et des animations subtiles pour guider la lecture sans perturber la navigation.",
   },
   {
     icon: BadgeCheck,
-    title: "Performance",
-    copy: "Next.js, images optimisées, et attention à l'accessibilité.",
+    title: "Vitesse et visibilité",
+    copy: "Des pages rapides, lisibles sur mobile et pensées pour offrir de bonnes bases de référencement.",
   },
 ];
 
@@ -44,22 +44,22 @@ const techStack = {
 const categories = [
   {
     key: "frontend" as const,
-    title: "Front-end",
+    title: "Interface visuelle",
     icon: Code2,
   },
   {
     key: "backend" as const,
-    title: "Back-end",
+    title: "Logique serveur",
     icon: Globe,
   },
   {
     key: "database" as const,
-    title: "Data",
+    title: "Stockage des données",
     icon: Database,
   },
   {
     key: "cloud" as const,
-    title: "Delivery",
+    title: "Hébergement",
     icon: Layers3,
   },
 ];
@@ -72,7 +72,7 @@ export function TechStackSection({ onContactClick }: TechStackSectionProps) {
       id="tech"
       className="relative overflow-hidden px-4 py-16 sm:px-6 lg:px-8"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.4),rgba(245,245,247,0.88))]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,252,248,0.5),rgba(235,227,214,0.92))]" />
       <div className="relative mx-auto max-w-7xl">
         <motion.div
           initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
@@ -81,14 +81,16 @@ export function TechStackSection({ onContactClick }: TechStackSectionProps) {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mb-10 max-w-3xl"
         >
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.34em] text-zinc-500">
-            Stack technique
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.34em] text-[#b84328]">
+            L&apos;approche technique
           </p>
-          <h2 className="text-balance text-[clamp(1.8rem,3.2vw,3.2rem)] leading-[0.96] font-semibold text-zinc-950">
-            Les outils que j&apos;utilise.
+          <h2 className="font-display text-balance text-[clamp(1.8rem,3.2vw,3.2rem)] leading-[0.98] font-semibold text-zinc-950">
+            Des outils modernes au service de vos objectifs.
           </h2>
           <p className="mt-5 text-lg leading-8 text-zinc-600">
-            Les technologies avec lesquelles je travaille au quotidien.
+            Je choisis les bons outils pour vous livrer un site rapide, fiable
+            et agréable à utiliser. Les technologies comptent, mais elles
+            restent au service du résultat final.
           </p>
         </motion.div>
 
@@ -106,7 +108,7 @@ export function TechStackSection({ onContactClick }: TechStackSectionProps) {
               }}
               className="glass-panel rounded-[1.25rem] p-5"
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-950 text-white shadow-[0_20px_40px_rgba(15,23,42,0.12)]">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#c24b2b_0%,#a83a1f_100%)] text-white shadow-[0_20px_40px_rgba(194,75,43,0.22)]">
                 <pillar.icon className="h-5 w-5" />
               </div>
               <h3 className="mt-5 text-xl font-semibold text-zinc-950">
@@ -134,7 +136,7 @@ export function TechStackSection({ onContactClick }: TechStackSectionProps) {
               className="rounded-[1.25rem] border border-white/70 bg-white/[0.88] p-5 shadow-[0_24px_50px_rgba(15,23,42,0.06)]"
             >
               <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-50 text-blue-700">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-orange-50 text-[#b84328]">
                   <category.icon className="h-5 w-5" />
                 </div>
                 <h3 className="text-lg font-semibold text-zinc-950">
@@ -155,14 +157,20 @@ export function TechStackSection({ onContactClick }: TechStackSectionProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-12 flex justify-center"
+          className="mt-12 flex flex-col items-center gap-5"
         >
+          <p className="max-w-2xl text-center text-sm leading-7 text-zinc-600 sm:text-base">
+            Si ces noms vous parlent peu, c&apos;est normal. L&apos;essentiel,
+            c&apos;est ce qu&apos;ils permettent : un site solide, simple à
+            faire évoluer et confortable pour vos visiteurs.
+          </p>
           <button
+            type="button"
             onClick={onContactClick}
-            className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-zinc-950 px-7 py-4 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="btn-editorial-solid inline-flex cursor-pointer items-center gap-2 px-7 py-4 text-sm transition-transform duration-300 hover:-translate-y-0.5"
           >
             <Mail className="h-4 w-4" />
-            Me contacter
+            Discuter du projet
           </button>
         </motion.div>
       </div>

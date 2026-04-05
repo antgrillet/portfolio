@@ -26,6 +26,12 @@ interface VercelDomain {
 	verified: boolean;
 }
 
+function withCacheBust(url: string, updatedAt: number): string {
+	const version = String(updatedAt);
+	const separator = url.includes("?") ? "&" : "?";
+	return `${url}${separator}v=${version}`;
+}
+
 async function fetchGitHubData(
 	owner: string,
 	repo: string
@@ -286,9 +292,12 @@ export async function GET() {
 					(b) => b.pathname === `screenshots/${project.name}.png`
 				);
 				const imageUrl = blobScreenshot?.url
-					? blobScreenshot.url
+					? withCacheBust(blobScreenshot.url, project.updatedAt)
 					: liveUrl
-					? `https://image.thum.io/get/width/1920/crop/1080/noanimate/${liveUrl}`
+					? withCacheBust(
+							`https://image.thum.io/get/width/1920/crop/1080/noanimate/${liveUrl}`,
+							project.updatedAt
+						)
 					: undefined;
 
 				return {

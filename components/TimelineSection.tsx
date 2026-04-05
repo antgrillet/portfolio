@@ -16,9 +16,9 @@ const timelineData = [
   {
     year: "2024 - aujourd'hui",
     title: "Freelance",
-    subtitle: "Développeur full-stack",
+    subtitle: "Création de sites web",
     description:
-      "Conception et développement de sites web pour des indépendants et petites entreprises.",
+      "Conception et développement de sites web pour des indépendants et petites entreprises, avec une approche simple, concrète et orientée résultats.",
     icon: Briefcase,
     label: "Clients",
   },
@@ -27,7 +27,7 @@ const timelineData = [
     title: "École 42",
     subtitle: "Paris",
     description:
-      "Formation en algorithmique, systèmes et résolution de problèmes. Peer-to-peer, pas de cours magistraux.",
+      "Formation intensive au développement, à la logique et à la résolution de problèmes, dans un environnement très pratique et autonome.",
     icon: Rocket,
     label: "Formation",
   },
@@ -59,19 +59,20 @@ export function TimelineSection() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="lg:sticky lg:top-28 lg:self-start"
         >
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.34em] text-zinc-500">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.34em] text-[#b84328]">
             Parcours
           </p>
-          <h2 className="text-balance text-[clamp(2rem,3.4vw,3.4rem)] leading-[0.95] font-semibold text-zinc-950">
-            Mon parcours.
+          <h2 className="font-display text-balance text-[clamp(2rem,3.4vw,3.4rem)] leading-[0.98] font-semibold text-zinc-950">
+            Un parcours construit sur le concret.
           </h2>
           <p className="mt-6 max-w-xl text-lg leading-8 text-zinc-600">
-            Un chemin atypique, du sport au développement web.
+            Un chemin atypique, du sport au web, avec une même idée directrice :
+            progresser, simplifier et aller à l&apos;essentiel.
           </p>
         </motion.div>
 
         <div className="relative pl-6 sm:pl-8">
-          <div className="absolute bottom-0 left-2 top-0 w-px bg-gradient-to-b from-blue-200 via-zinc-300 to-transparent sm:left-3" />
+          <div className="absolute bottom-0 left-2 top-0 w-px bg-gradient-to-b from-orange-300 via-stone-300 to-transparent sm:left-3" />
           <div className="space-y-6">
             {timelineData.map((item, index) => (
               <motion.article
@@ -86,8 +87,8 @@ export function TimelineSection() {
                 }}
                 className="relative rounded-[1.25rem] border border-white/70 bg-white/80 p-6 shadow-[0_24px_50px_rgba(15,23,42,0.08)] backdrop-blur-xl"
               >
-                <div className="absolute left-[-2.15rem] top-7 flex h-10 w-10 items-center justify-center rounded-full border border-blue-200 bg-white shadow-[0_12px_30px_rgba(37,99,235,0.14)] sm:left-[-2.4rem]">
-                  <item.icon className="h-[18px] w-[18px] text-blue-600" />
+                <div className="absolute left-[-2.15rem] top-7 flex h-10 w-10 items-center justify-center rounded-full border border-orange-200/90 bg-white shadow-[0_12px_30px_rgba(194,75,43,0.15)] sm:left-[-2.4rem]">
+                  <item.icon className="h-[18px] w-[18px] text-[#b84328]" />
                 </div>
                 <div className="flex flex-wrap items-center gap-3">
                   <span className="rounded-full bg-zinc-950 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-white">

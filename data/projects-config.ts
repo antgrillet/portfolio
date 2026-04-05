@@ -76,7 +76,7 @@ export const projectsConfig: ProjectConfig[] = [
 	},
 	{
 		vercelName: "portfolio",
-		description: "Portfolio personnel présentant mes projets et compétences en développement web",
+		description: "Portfolio personnel présentant ma manière de concevoir des sites clairs, crédibles et simples à utiliser",
 		additionalTech: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
 		featured: false,
 	},

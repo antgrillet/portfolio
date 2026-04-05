@@ -41,10 +41,10 @@ export function HeroSection({ onContactClick }: HeroSectionProps) {
         style={shouldReduceMotion ? undefined : { y: backgroundY }}
         className="pointer-events-none absolute inset-0"
       >
-        <div className="absolute inset-x-0 top-0 h-[72%] bg-[radial-gradient(circle_at_top,_rgba(115,168,255,0.18),_transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.58),rgba(245,245,247,0)_70%)]" />
-        <div className="animate-pulse-soft absolute left-[-10%] top-20 h-72 w-72 rounded-full bg-blue-200/60 blur-[90px]" />
-        <div className="animate-blob absolute right-[-8%] top-24 h-80 w-80 rounded-full bg-sky-100/80 blur-[120px]" />
-        <div className="animation-delay-2000 animate-blob absolute bottom-10 left-[8%] h-64 w-64 rounded-full bg-indigo-100/70 blur-[100px]" />
+        <div className="absolute inset-x-0 top-0 h-[72%] bg-[radial-gradient(circle_at_top,_rgba(115,168,255,0.14),_transparent_40%),radial-gradient(ellipse_at_20%_0%,rgba(194,75,43,0.07),transparent_50%),linear-gradient(180deg,rgba(255,255,255,0.5),rgba(246,241,232,0)_72%)]" />
+        <div className="animate-pulse-soft absolute left-[-10%] top-20 h-72 w-72 rounded-full bg-orange-200/45 blur-[90px]" />
+        <div className="animate-blob absolute right-[-8%] top-24 h-80 w-80 rounded-full bg-sky-100/70 blur-[120px]" />
+        <div className="animation-delay-2000 animate-blob absolute bottom-10 left-[8%] h-64 w-64 rounded-full bg-amber-100/65 blur-[100px]" />
       </motion.div>
 
       <div className="relative mx-auto max-w-7xl">
@@ -63,39 +63,55 @@ export function HeroSection({ onContactClick }: HeroSectionProps) {
               </span>
               Disponible pour freelance
             </span>
-            <span className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-zinc-200/80 bg-white/55 px-4 py-2 max-[419px]:px-3.5 max-[419px]:py-1.5 sm:w-auto">
-              <Sparkles className="h-3.5 w-3.5 text-blue-600" />
-              Portfolio
+            <span className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-stone-200/90 bg-white/60 px-4 py-2 max-[419px]:px-3.5 max-[419px]:py-1.5 sm:w-auto">
+              <Sparkles className="h-3.5 w-3.5 text-[#b84328]" />
+              Accompagnement clair
             </span>
           </div>
 
           <p className="mb-4 text-xs font-medium uppercase tracking-[0.36em] text-zinc-500 max-[419px]:tracking-[0.28em] sm:mb-5 sm:text-sm">
-            Antonin Grillet · React / Next.js / Motion design
+            Antonin Grillet · Sites web clairs pour activités et projets concrets
           </p>
-          <h1 className="text-gradient-hero text-balance text-[clamp(2.15rem,5.5vw,4rem)] leading-[1.1] font-semibold max-[419px]:text-[clamp(2rem,10vw,2.6rem)] md:leading-[0.94]">
-            Développeur front-end, orienté interface et mouvement.
+          <h1 className="text-balance font-display text-[clamp(2.15rem,5.5vw,4rem)] font-semibold leading-[1.08] max-[419px]:text-[clamp(2rem,10vw,2.6rem)] md:leading-[0.98]">
+            <span className="text-gradient-hero">Je transforme des idées encore floues en </span>
+            <span className="text-accent-editorial">sites web clairs et crédibles.</span>
           </h1>
           <p className="mx-auto mt-6 max-w-3xl text-balance text-sm leading-relaxed text-zinc-600 sm:mt-8 sm:text-base sm:leading-7 md:text-xl md:leading-8">
-            Je conçois et développe des sites et applications web avec React,
-            Next.js et TypeScript. Sensible au détail, au mouvement et à la
-            clarté de l&apos;interface.
+            Vous n&apos;avez pas besoin d&apos;arriver avec le bon vocabulaire
+            technique. Si vous avez une activité, une idée ou un projet à mieux
+            présenter en ligne, je vous aide à le rendre simple à comprendre,
+            agréable à parcourir et rassurant pour vos visiteurs.
           </p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-3 max-[419px]:gap-2.5 sm:mt-10 sm:flex-row sm:gap-4">
             <button
+              type="button"
               onClick={onContactClick}
-              className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-zinc-950 px-7 py-3.5 text-sm font-semibold text-white shadow-[0_24px_50px_rgba(15,23,42,0.18)] transition-transform duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 max-[419px]:px-5 max-[419px]:py-3 sm:w-auto sm:py-4"
+              className="btn-editorial-solid inline-flex w-full cursor-pointer items-center justify-center gap-2 px-7 py-3.5 text-sm max-[419px]:px-5 max-[419px]:py-3 sm:w-auto sm:py-4"
             >
-              Me contacter
+              Parler de mon projet
               <ArrowRight className="h-4 w-4" />
             </button>
             <button
+              type="button"
               onClick={scrollToProjects}
-              className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-zinc-300/80 bg-white/70 px-7 py-3.5 text-sm font-semibold text-zinc-900 shadow-[0_20px_40px_rgba(15,23,42,0.06)] transition-colors duration-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 max-[419px]:px-5 max-[419px]:py-3 sm:w-auto sm:py-4"
+              className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border-2 border-zinc-800/90 bg-white/80 px-7 py-3.5 text-sm font-semibold text-zinc-900 shadow-[0_20px_40px_rgba(15,23,42,0.06)] transition-colors duration-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-[#c24b2b] max-[419px]:px-5 max-[419px]:py-3 sm:w-auto sm:py-4"
             >
-              Voir les réalisations
+              Voir des exemples
               <ArrowRight className="h-4 w-4" />
             </button>
+          </div>
+
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs font-medium text-zinc-500 sm:mt-6 sm:text-sm">
+            <span className="rounded-full border border-zinc-200/80 bg-white/65 px-3 py-1.5">
+              Pas besoin de brief technique
+            </span>
+            <span className="rounded-full border border-zinc-200/80 bg-white/65 px-3 py-1.5">
+              On clarifie ensemble
+            </span>
+            <span className="rounded-full border border-zinc-200/80 bg-white/65 px-3 py-1.5">
+              Du besoin à la mise en ligne
+            </span>
           </div>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-2 max-[419px]:grid max-[419px]:w-full max-[419px]:grid-cols-2 max-[419px]:gap-2 sm:mt-8 sm:gap-3">
@@ -104,7 +120,7 @@ export function HeroSection({ onContactClick }: HeroSectionProps) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Profil GitHub"
-              className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-full border border-zinc-200 bg-white/60 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors duration-200 hover:bg-white hover:text-zinc-950 focus:outline-none focus:ring-2 focus:ring-blue-500 max-[419px]:w-full max-[419px]:px-2.5 sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
+              className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-full border border-zinc-200 bg-white/60 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors duration-200 hover:bg-white hover:text-zinc-950 focus:outline-none focus:ring-2 focus:ring-[#c24b2b] max-[419px]:w-full max-[419px]:px-2.5 sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
             >
               <Github className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               GitHub
@@ -114,7 +130,7 @@ export function HeroSection({ onContactClick }: HeroSectionProps) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Profil LinkedIn"
-              className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-full border border-zinc-200 bg-white/60 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors duration-200 hover:bg-white hover:text-zinc-950 focus:outline-none focus:ring-2 focus:ring-blue-500 max-[419px]:w-full max-[419px]:px-2.5 sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
+              className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-full border border-zinc-200 bg-white/60 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors duration-200 hover:bg-white hover:text-zinc-950 focus:outline-none focus:ring-2 focus:ring-[#c24b2b] max-[419px]:w-full max-[419px]:px-2.5 sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
             >
               <Linkedin className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               LinkedIn
@@ -122,7 +138,7 @@ export function HeroSection({ onContactClick }: HeroSectionProps) {
             <a
               href="mailto:antoningrillet@asmix.fr"
               aria-label="Envoyer un email"
-              className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-full border border-zinc-200 bg-white/60 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors duration-200 hover:bg-white hover:text-zinc-950 focus:outline-none focus:ring-2 focus:ring-blue-500 max-[419px]:col-span-2 max-[419px]:w-full max-[419px]:px-2.5 sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
+              className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-full border border-zinc-200 bg-white/60 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors duration-200 hover:bg-white hover:text-zinc-950 focus:outline-none focus:ring-2 focus:ring-[#c24b2b] max-[419px]:col-span-2 max-[419px]:w-full max-[419px]:px-2.5 sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
             >
               <Mail className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               antoningrillet@asmix.fr
@@ -141,25 +157,26 @@ export function HeroSection({ onContactClick }: HeroSectionProps) {
           >
             <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
               <div className="space-y-6">
-                <div className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50/70 px-4 py-2 text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-blue-700">
+                <div className="inline-flex items-center gap-2 rounded-full border border-orange-100/90 bg-orange-50/80 px-4 py-2 text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-[#b84328]">
                   À propos
                 </div>
                 <div className="space-y-4">
                   <h2 className="text-balance text-2xl font-semibold leading-tight text-zinc-950 sm:text-3xl">
-                    Je fais des sites qui vont droit au but.
+                    Je vous aide à montrer clairement ce que vous faites.
                   </h2>
                   <p className="max-w-xl text-base leading-7 text-zinc-600 sm:text-lg">
-                    Architecture front-end, performance, accessibilité et
-                    animations. J&apos;essaie de rendre chaque interface lisible
-                    et agréable à utiliser.
+                    Mon rôle n&apos;est pas seulement de coder un site. Je vous
+                    aide aussi à organiser le message, à mettre l&apos;essentiel
+                    en avant et à créer une expérience simple pour les personnes
+                    qui découvrent votre activité.
                   </p>
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-3">
                   {[
-                    { label: "Projets live", value: "9+" },
-                    { label: "Focus", value: "UI / Motion" },
-                    { label: "Base", value: "42 Paris" },
+                    { label: "Projets en ligne", value: "9+" },
+                    { label: "Accompagnement direct", value: "Freelance" },
+                    { label: "Formation", value: "42 Paris" },
                   ].map((item) => (
                     <div
                       key={item.label}
@@ -177,7 +194,7 @@ export function HeroSection({ onContactClick }: HeroSectionProps) {
               </div>
 
               <div className="relative flex justify-center lg:justify-end">
-                <div className="absolute inset-6 rounded-[1.25rem] bg-[radial-gradient(circle_at_center,_rgba(147,197,253,0.38),_transparent_60%)] blur-3xl" />
+                <div className="absolute inset-6 rounded-[1.25rem] bg-[radial-gradient(circle_at_center,_rgba(253,186,116,0.35),_transparent_58%)] blur-3xl" />
                 <PhotoCarousel
                   images={["/images/profile-1.jpg", "/images/profile-2.jpg"]}
                   alt="Portrait d'Antonin Grillet"
@@ -190,16 +207,16 @@ export function HeroSection({ onContactClick }: HeroSectionProps) {
           <div className="grid gap-4">
             {[
               {
-                title: "Composants cohérents",
-                copy: "Des composants réutilisables qui gardent la même tenue du mobile au desktop.",
+                title: "Un message plus lisible",
+                copy: "Une structure claire pour que vos visiteurs comprennent rapidement qui vous êtes, ce que vous proposez et quoi faire ensuite.",
               },
               {
-                title: "Animations mesurées",
-                copy: "Du mouvement pour guider le regard et clarifier la navigation, sans en faire trop.",
+                title: "Un parcours simple",
+                copy: "Chaque page est pensée pour guider naturellement la lecture, sans surcharger ni perdre les personnes peu à l&apos;aise avec le web.",
               },
               {
-                title: "Attention au détail",
-                copy: "Rythme vertical, états de focus, densité de contenu et cohérence visuelle.",
+                title: "Une présence plus crédible",
+                copy: "Design, contenu et détails travaillent ensemble pour inspirer confiance dès les premières secondes.",
               },
             ].map((card, index) => (
               <motion.article
