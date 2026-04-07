@@ -17,12 +17,9 @@ interface ProjectCardProps {
 }
 
 function formatDate(date?: string) {
-  if (!date) {
-    return null;
-  }
-
+  if (!date) return null;
   try {
-    return new Intl.DateTimeFormat("fr-FR", {
+    return new Intl.DateTimeFormat("en-US", {
       month: "long",
       year: "numeric",
     }).format(new Date(date));
@@ -33,15 +30,12 @@ function formatDate(date?: string) {
 
 function getGradientForTitle(title: string): string {
   const gradients = [
-    "from-sky-500/90 via-blue-500/75 to-indigo-500/80",
-    "from-zinc-800 via-zinc-900 to-blue-700/80",
-    "from-cyan-500/80 via-sky-500/70 to-indigo-600/80",
-    "from-blue-500/70 via-violet-500/70 to-zinc-900",
+    "from-primary/20 to-primary/5",
+    "from-purple-100 to-indigo-50",
+    "from-zinc-100 to-white",
+    "from-indigo-100 to-purple-50",
   ];
-
-  const hash = title
-    .split("")
-    .reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const hash = title.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
   return gradients[hash % gradients.length];
 }
 
@@ -56,7 +50,6 @@ export function ProjectCard({
   compact = false,
   priority = false,
 }: ProjectCardProps) {
-  const formattedDate = formatDate(updatedAt);
   const gradient = getGradientForTitle(title);
   const initials = title
     .split(" ")
@@ -67,55 +60,36 @@ export function ProjectCard({
 
   const content = (
     <motion.article
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-      className={`group relative h-full overflow-hidden rounded-[1.25rem] border border-white/12 bg-white/8 shadow-[0_30px_70px_rgba(0,0,0,0.22)] backdrop-blur-md ${
-        featured ? "min-h-[420px]" : compact ? "min-h-[240px]" : "min-h-[300px]"
+      whileHover={{ y: -8 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className={`group relative flex h-full flex-col overflow-hidden rounded-[2rem] border border-zinc-100 bg-white shadow-sm transition-all hover:shadow-xl hover:border-primary/20 ${
+        featured ? "min-h-[400px]" : "min-h-[320px]"
       }`}
     >
-      <div className="absolute inset-0">
+      <div className={`relative w-full overflow-hidden ${featured ? "h-64 sm:h-72 lg:h-80" : "h-48"}`}>
         {imageUrl ? (
           <Image
             src={imageUrl}
             alt={title}
             fill
-            sizes={
-              featured
-                ? "(max-width: 1024px) 100vw, 60vw"
-                : "(max-width: 1024px) 100vw, 33vw"
-            }
+            sizes={featured ? "(max-width: 1024px) 100vw, 66vw" : "(max-width: 1024px) 100vw, 33vw"}
             priority={priority}
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
           />
         ) : (
-          <div
-            className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${gradient}`}
-          >
-            <span className="text-6xl font-semibold text-white/92">
-              {initials}
-            </span>
+          <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${gradient}`}>
+            <span className="text-5xl font-display font-medium text-zinc-300">{initials}</span>
           </div>
         )}
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.08)_0%,rgba(2,6,23,0.28)_34%,rgba(2,6,23,0.84)_100%)]" />
       </div>
 
-      <div className="relative flex h-full flex-col justify-between p-5 md:p-6">
-        <div className="flex items-start justify-between gap-3">
-          <span className="inline-flex rounded-full border border-white/[0.18] bg-white/10 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-white/90">
-            {featured ? "Projet mis en avant" : "Site en ligne"}
-          </span>
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.14] bg-black/10 px-3 py-1 text-xs font-medium text-white/70">
-            Ouvrir
-            <ArrowUpRight className="h-3.5 w-3.5" />
-          </span>
-        </div>
-
-        <div className="space-y-5">
-          <div className="flex flex-wrap gap-2">
+      <div className="flex flex-col justify-between p-6 md:p-8 flex-1 bg-white">
+        <div className="space-y-4">
+          <div className="flex flex-wrap gap-2 mb-4">
             {techStack.slice(0, compact ? 3 : 4).map((tech) => (
               <span
                 key={tech}
-                className="rounded-full border border-white/[0.14] bg-white/10 px-3 py-1 text-xs font-medium text-white/80 backdrop-blur-sm"
+                className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-medium text-zinc-600"
               >
                 {tech}
               </span>
@@ -123,31 +97,23 @@ export function ProjectCard({
           </div>
 
           <div>
-            <h3
-              className={`max-w-xl text-balance font-semibold text-white ${
-                featured ? "text-3xl leading-tight md:text-4xl" : "text-xl"
-              }`}
-            >
+            <h3 className={`font-medium text-zinc-950 ${featured ? "text-2xl md:text-3xl" : "text-xl"}`}>
               {title}
             </h3>
-            <p
-              className={`mt-3 max-w-xl text-white/75 ${
-                compact ? "text-sm leading-6" : "text-base leading-7"
-              }`}
-            >
+            <p className={`mt-2 text-zinc-600 ${compact ? "text-sm line-clamp-2" : "text-base line-clamp-3"}`}>
               {description}
             </p>
           </div>
+        </div>
 
-          <div className="flex items-center justify-between gap-4 text-sm text-white/64">
-            <span>
-              {formattedDate ? `Mis à jour ${formattedDate}` : "En ligne"}
-            </span>
-            <span className="inline-flex items-center gap-1 font-medium text-white">
-              Voir le projet
-              <ArrowUpRight className="h-4 w-4" />
-            </span>
-          </div>
+        <div className="mt-8 flex items-center justify-between border-t border-zinc-100 pt-6">
+          <span className="text-sm text-zinc-500">
+            {featured ? "Featured Work" : "Web App"}
+          </span>
+          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-transform group-hover:translate-x-1">
+            View Project
+            <ArrowUpRight className="h-4 w-4" />
+          </span>
         </div>
       </div>
     </motion.article>
@@ -162,7 +128,7 @@ export function ProjectCard({
       href={liveUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="block h-full cursor-pointer rounded-[1.25rem] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-[#05070b]"
+      className="block h-full cursor-pointer rounded-[2rem] focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-4"
     >
       {content}
     </a>

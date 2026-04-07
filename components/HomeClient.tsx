@@ -3,10 +3,9 @@
 import { useState } from "react";
 import { Navigation } from "@/components/Navigation";
 import { HeroSection } from "@/components/HeroSection";
-import { TimelineSection } from "@/components/TimelineSection";
+import { AboutSection } from "@/components/AboutSection";
+import { ProcessSection } from "@/components/ProcessSection";
 import { ProjectsSection } from "@/components/ProjectsSection";
-import { TechStackSection } from "@/components/TechStackSection";
-
 import { ContactSection } from "@/components/ContactSection";
 import { ContactModal } from "@/components/ContactModal";
 import { Footer } from "@/components/Footer";
@@ -22,10 +21,9 @@ export function HomeClient() {
       <Navigation />
       <main id="main-content" className="overflow-hidden">
         <HeroSection onContactClick={openContactModal} />
+        <AboutSection />
+        <ProcessSection />
         <ProjectsSection onContactClick={openContactModal} />
-        <TimelineSection />
-
-        <TechStackSection onContactClick={openContactModal} />
         <ContactSection onContactClick={openContactModal} />
       </main>
       <Footer />

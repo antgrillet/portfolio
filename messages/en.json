@@ -1,0 +1,65 @@
+{
+  "Navigation": {
+    "projects": "Projects",
+    "process": "Process",
+    "contact": "Contact"
+  },
+  "Hero": {
+    "greeting": "Hi I'm Antonin",
+    "title": "Product Designer",
+    "availability": "Available for new opportunities",
+    "description": "passionate about creating intuitive digital experiences that connect users with value.",
+    "cta": "Get in Touch",
+    "trustedBy": "Trusted by happy clients across residential and commercial projects.",
+    "marquee": {
+      "item1": "Web Applications",
+      "item2": "Corporate Sites",
+      "item3": "B2B SaaS",
+      "item4": "E-Commerce",
+      "item5": "Mobile Apps"
+    }
+  },
+  "About": {
+    "headline": "focus is on blending clear strategy, thoughtful design, and user empathy to",
+    "highlightedText": "craft experiences that solve real problems",
+    "skills": {
+      "s1": "Product Design",
+      "s2": "UI Design",
+      "s3": "Design Systems",
+      "s4": "User Research",
+      "s5": "Usability Testing"
+    }
+  },
+  "Process": {
+    "badge": "Process",
+    "title": "Here's how it works",
+    "subtitle": "A clear process, tangible deliverables. No surprises.",
+    "deliverableLabel": "What you get",
+    "step1": {
+      "title": "We talk",
+      "description": "A conversation to understand your project, goals and users. I ask the right questions to scope things clearly.",
+      "deliverable": "Structured brief and a clear proposal for what comes next"
+    },
+    "step2": {
+      "title": "I design & build",
+      "description": "Figma mockups and visual directions we refine together, then implementation: clean, responsive, performance-minded code. You follow progress on a preview link.",
+      "deliverable": "Signed-off design, navigable prototype, and a site ready to go live"
+    },
+    "step3": {
+      "title": "I support you",
+      "description": "Go-live, handover and follow-up after delivery. I stay available as the project evolves.",
+      "deliverable": "Deployed site, practical notes for day-to-day use, and helpful documentation"
+    }
+  },
+  "Projects": {
+    "badge": "Best Projects",
+    "title": "Selected Works"
+  },
+  "Contact": {
+    "title": "Let's work together",
+    "submit": "Send Message"
+  },
+  "Footer": {
+    "copyright": "© {year} Antonin Grillet. All rights reserved."
+  }
+}

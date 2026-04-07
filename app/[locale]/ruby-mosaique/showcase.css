@@ -1,7 +1,8 @@
-/* Showcase Ruby — mosaïque (port du livrable), scoping */
+/* Showcase Ruby — mosaïque, adapté à la nouvelle DA du portfolio */
 .ruby-showcase {
-  --ruby-bg: #f0f0f0;
-  --ruby-fg: #1a1a1a;
+  --ruby-bg: #fafafa;
+  --ruby-fg: #0a0a0a;
+  --ruby-accent: #8b5cf6; /* violet/lavande */
   background: var(--ruby-bg);
   color: var(--ruby-fg);
   min-height: 100%;
@@ -11,7 +12,8 @@
 .ruby-showcase h2,
 .ruby-showcase h3,
 .ruby-showcase h4 {
-  font-family: var(--font-fraunces), Georgia, serif;
+  font-family: var(--font-display), sans-serif;
+  letter-spacing: -0.04em;
 }
 
 .ruby-showcase p,
@@ -22,7 +24,12 @@
 .ruby-showcase input,
 .ruby-showcase textarea,
 .ruby-showcase button {
-  font-family: var(--font-lato), system-ui, sans-serif;
+  font-family: var(--font-body), sans-serif;
+}
+
+/* Fallback italic/script matching the hero logic */
+.ruby-showcase .font-serif {
+  font-family: var(--font-serif), serif;
 }
 
 @media (hover: hover) and (pointer: fine) {

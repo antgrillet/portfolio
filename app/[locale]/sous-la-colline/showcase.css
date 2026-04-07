@@ -1,0 +1,31 @@
+/* Showcase Sous la colline, adapté à la nouvelle DA du portfolio */
+.slc-showcase {
+  --background: #fafafa;
+  --foreground: #0a0a0a;
+  --brand-terracotta: #8b5cf6; /* violet/lavande (primary) */
+  --brand-sand: #a78bfa; /* lavande clair (secondary) */
+  --brand-blue: #7c3aed; /* violet foncé (accent) */
+  --brand-muted: #71717a; /* zinc-500 */
+  --brand-warm: #f4f4f5; /* zinc-100 */
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.slc-showcase h1,
+.slc-showcase h2,
+.slc-showcase h3,
+.slc-showcase h4 {
+  font-family: var(--font-display), sans-serif;
+  letter-spacing: -0.04em;
+}
+
+.slc-showcase p,
+.slc-showcase a,
+.slc-showcase span,
+.slc-showcase li,
+.slc-showcase label,
+.slc-showcase input,
+.slc-showcase textarea,
+.slc-showcase button {
+  font-family: var(--font-body), sans-serif;
+}

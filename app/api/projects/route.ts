@@ -5,6 +5,7 @@ import {
 	projectsConfig,
 	DEFAULT_GITHUB_OWNER,
 } from "@/data/projects-config";
+import { getAdminConfig } from "@/lib/admin-config";
 
 // Type pour les blobs du Vercel Blob storage
 interface BlobItem {
@@ -19,6 +20,7 @@ interface GitHubRepo {
 	language: string | null;
 	stargazers_count: number;
 	html_url: string;
+	pushed_at: string | null;
 }
 
 interface VercelDomain {
@@ -161,7 +163,13 @@ export async function GET() {
 		}
 
 		const data = await response.json();
-		const projects: VercelProject[] = data.projects;
+		const allProjects: VercelProject[] = data.projects;
+
+		// Filtrer les projets cachés avant enrichissement (économise des appels API)
+		const adminConfig = await getAdminConfig();
+		const projects = allProjects.filter(
+			(p) => !adminConfig.hiddenProjects.includes(p.name)
+		);
 
 		// Enrichir chaque projet avec les données GitHub
 		const enrichedProjects = await Promise.all(
@@ -300,29 +308,31 @@ export async function GET() {
 						)
 					: undefined;
 
-				return {
-					id: project.id,
-					title: project.name
-						.split("-")
-						.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-						.join(" "),
-					description,
-					longDescription: config?.longDescription,
-					techStack,
-					liveUrl,
-					githubUrl,
-					imageUrl,
-					framework: project.framework || undefined,
-					updatedAt: new Date(project.updatedAt).toISOString(),
-					featured:
-						config?.featured !== undefined
-							? config.featured
-							: (githubData?.stargazers_count || 0) > 5,
-				} as Project;
+			return {
+				id: project.id,
+				title: project.name
+					.split("-")
+					.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+					.join(" "),
+				description,
+				longDescription: config?.longDescription,
+				techStack,
+				liveUrl,
+				githubUrl,
+				imageUrl,
+				framework: project.framework || undefined,
+				updatedAt: githubData?.pushed_at
+					? new Date(githubData.pushed_at).toISOString()
+					: new Date(project.updatedAt).toISOString(),
+				featured:
+					config?.featured !== undefined
+						? config.featured
+						: (githubData?.stargazers_count || 0) > 5,
+			} as Project;
 			})
 		);
 
-		// Trier par date de mise à jour (plus récents en premier)
+		// Trier par date de dernier push GitHub (plus récents en premier)
 		enrichedProjects.sort(
 			(a, b) =>
 				new Date(b.updatedAt || 0).getTime() -

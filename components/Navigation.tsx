@@ -1,24 +1,35 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowUpRight, Menu, X } from "lucide-react";
-
-const navItems = [
-  { label: "Projets", href: "#projects" },
-  { label: "Parcours", href: "#parcours" },
-
-  { label: "Stack", href: "#tech" },
-  { label: "Contact", href: "#contact" },
-];
+import { Menu, X, Globe } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
+import { usePathname, useRouter } from "@/i18n/routing";
 
 export function Navigation() {
+  const t = useTranslations("Navigation");
+  const locale = useLocale();
+  const pathname = usePathname();
+  const router = useRouter();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
+  const [isScrolled, setIsScrolled] = useState(false);
   const shouldReduceMotion = useReducedMotion();
+
+  const navItems = useMemo(
+    () => [
+      { label: t("projects"), href: "#projects" },
+      { label: t("process"), href: "#process" },
+      { label: t("contact"), href: "#contact" },
+    ],
+    [t]
+  );
 
   useEffect(() => {
     const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+
       const sections = ["hero", ...navItems.map((item) => item.href.slice(1))];
       const scrollPosition = window.scrollY + window.innerHeight * 0.24;
 
@@ -35,13 +46,11 @@ export function Navigation() {
     handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [navItems]);
 
-  const scrollToContact = () => {
-    document.getElementById("contact")?.scrollIntoView({
-      behavior: shouldReduceMotion ? "auto" : "smooth",
-    });
-    setIsMenuOpen(false);
+  const toggleLocale = () => {
+    const nextLocale = locale === "fr" ? "en" : "fr";
+    router.replace(pathname, { locale: nextLocale });
   };
 
   return (
@@ -53,148 +62,128 @@ export function Navigation() {
         Aller au contenu principal
       </a>
 
-      <motion.nav
+      <motion.header
         initial={shouldReduceMotion ? { opacity: 0 } : { y: -24, opacity: 0 }}
         animate={shouldReduceMotion ? { opacity: 1 } : { y: 0, opacity: 1 }}
-        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed inset-x-0 top-4 z-50 px-3 sm:px-6"
-        role="navigation"
-        aria-label="Navigation principale"
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="fixed inset-x-0 top-0 z-50 pt-4 md:pt-6 px-4 md:px-6"
+        role="banner"
       >
-        <div className="glass-panel mx-auto flex max-w-6xl items-center justify-between rounded-full px-3 py-2 text-zinc-900">
-          <div className="flex items-center gap-3">
+        <div
+          className={`mx-auto max-w-5xl rounded-full transition-all duration-500 ${
+            isScrolled
+              ? "bg-white/70 shadow-sm backdrop-blur-xl border border-zinc-200/50 py-3 px-4 md:px-6"
+              : "bg-transparent border-transparent py-3 px-2 md:px-4"
+          }`}
+        >
+          <nav
+            className="flex items-center justify-between relative"
+            role="navigation"
+            aria-label="Navigation principale"
+          >
+            {/* Logo / Nom */}
             <motion.a
               href="#hero"
               initial={shouldReduceMotion ? undefined : { opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.14 }}
-              className="cursor-pointer rounded-full px-3 py-2 text-sm font-semibold uppercase tracking-[0.24em] text-zinc-950 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              transition={{ delay: 0.1 }}
+              onClick={() => setIsMenuOpen(false)}
+              className="relative z-10 flex items-center gap-2 cursor-pointer text-lg font-medium tracking-tight text-zinc-950 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full px-2"
               aria-label="Antonin Grillet - Retour à l'accueil"
             >
-              Antonin
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-950 text-white font-bold text-xs">
+                AG
+              </div>
+              <span className="hidden sm:block">Antonin Grillet</span>
             </motion.a>
-            <span className="hidden rounded-full border border-zinc-200/80 bg-white/70 px-3 py-1 text-[0.68rem] font-medium uppercase tracking-[0.24em] text-zinc-500 md:inline-flex">
-              React / Next.js / Motion
-            </span>
-          </div>
 
-          <div className="hidden items-center gap-1 md:flex">
-            {navItems.map((item, index) => {
-              const isActive = activeSection === item.href.slice(1);
-              return (
-                <motion.a
-                  key={item.label}
-                  href={item.href}
-                  initial={
-                    shouldReduceMotion ? undefined : { opacity: 0, y: -10 }
-                  }
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.08 * (index + 1) }}
-                  className={`relative cursor-pointer rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    isActive
-                      ? "text-zinc-950"
-                      : "text-zinc-600 hover:text-zinc-950"
-                  }`}
-                  aria-current={isActive ? "page" : undefined}
-                >
-                  {item.label}
-                  {isActive && (
-                    <motion.span
-                      layoutId="floating-nav-pill"
-                      className="absolute inset-0 -z-10 rounded-full bg-white/95 shadow-[0_10px_30px_rgba(15,23,42,0.08)]"
-                      transition={{
-                        type: "spring",
-                        bounce: 0.18,
-                        duration: 0.5,
-                      }}
-                    />
-                  )}
-                </motion.a>
-              );
-            })}
-            <button
-              type="button"
-              onClick={scrollToContact}
-              className="ml-2 inline-flex cursor-pointer items-center gap-2 rounded-full bg-zinc-950 px-4 py-2.5 text-sm font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              Parler de votre projet
-              <ArrowUpRight className="h-4 w-4" />
-            </button>
-          </div>
+            {/* Liens Desktop */}
+            <div className="hidden md:flex items-center justify-center gap-1 absolute left-1/2 -translate-x-1/2">
+              {navItems.map((item, index) => {
+                const isActive = activeSection === item.href.slice(1);
+                return (
+                  <motion.a
+                    key={item.label}
+                    href={item.href}
+                    initial={shouldReduceMotion ? undefined : { opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.05 * (index + 1) }}
+                    className={`relative cursor-pointer text-sm font-medium transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full px-4 py-2 ${
+                      isActive ? "text-zinc-950" : "text-zinc-500 hover:text-zinc-950"
+                    }`}
+                    aria-current={isActive ? "page" : undefined}
+                  >
+                    <span className="relative z-10">{item.label}</span>
+                    {isActive && (
+                      <motion.div
+                        layoutId="nav-indicator"
+                        className="absolute inset-0 rounded-full bg-zinc-100"
+                        transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
+                      />
+                    )}
+                  </motion.a>
+                );
+              })}
+            </div>
 
-          <button
-            type="button"
-            onClick={() => setIsMenuOpen((open) => !open)}
-            className="inline-flex cursor-pointer rounded-full p-3 text-zinc-700 transition-colors hover:text-zinc-950 focus:outline-none focus:ring-2 focus:ring-blue-500 md:hidden"
-            aria-expanded={isMenuOpen}
-            aria-controls="mobile-menu"
-            aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
-          >
-            {isMenuOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
-          </button>
+            {/* Actions (Langue + Menu Mobile) */}
+            <div className="flex items-center gap-2 relative z-10">
+              <button
+                onClick={toggleLocale}
+                className="flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-950 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full px-3 py-2 uppercase bg-zinc-50 hover:bg-zinc-100"
+                aria-label="Changer de langue"
+              >
+                <Globe className="h-3.5 w-3.5" />
+                {locale}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsMenuOpen((open) => !open)}
+                className="md:hidden inline-flex cursor-pointer items-center justify-center h-10 w-10 rounded-full bg-zinc-50 text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-zinc-950 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                aria-expanded={isMenuOpen}
+                aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+              >
+                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </button>
+            </div>
+          </nav>
         </div>
 
+        {/* Menu Mobile Déroulant */}
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
-              id="mobile-menu"
-              initial={
-                shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 }
-              }
-              animate={{ opacity: 1, y: 0 }}
-              exit={
-                shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 }
-              }
-              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="mx-auto mt-3 flex max-w-6xl flex-col gap-px overflow-hidden rounded-[1.25rem] border border-[#DCE5F6] bg-[#DCE5F6] shadow-[0_30px_60px_-20px_rgba(31,79,215,0.08)] max-[419px]:rounded-[1.1rem] md:hidden"
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -10, scale: 0.95 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="absolute left-4 right-4 top-20 md:hidden origin-top"
             >
-              {navItems.map((item) => {
-                const isActive = activeSection === item.href.slice(1);
-                return (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="group flex cursor-pointer items-center justify-between bg-white px-6 py-4 transition-colors hover:bg-[#F6F9FF] focus:bg-[#F6F9FF] focus:outline-none focus:ring-2 focus:ring-blue-500 max-[419px]:px-5 max-[419px]:py-3.5"
-                    aria-current={isActive ? "page" : undefined}
-                  >
-                    <span
-                      className={`text-xs font-medium transition-colors ${
-                        isActive ? "text-[#1F4FD7]" : "text-[#111111]"
+              <div className="rounded-2xl bg-white/90 p-4 shadow-xl backdrop-blur-xl border border-zinc-200/50 flex flex-col gap-2">
+                {navItems.map((item) => {
+                  const isActive = activeSection === item.href.slice(1);
+                  return (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`block rounded-xl px-4 py-3 text-base font-medium transition-colors ${
+                        isActive
+                          ? "bg-zinc-100 text-zinc-950"
+                          : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-950"
                       }`}
+                      aria-current={isActive ? "page" : undefined}
                     >
                       {item.label}
-                    </span>
-                    <span
-                      className={`text-[10px] transition-colors duration-300 group-hover:text-[#1F4FD7] ${
-                        isActive ? "text-[#1F4FD7]" : "text-[#8CA2CE]"
-                      }`}
-                    >
-                      {isActive ? "↓" : "↗"}
-                    </span>
-                  </a>
-                );
-              })}
-              <button
-                type="button"
-                onClick={scrollToContact}
-                className="group flex w-full cursor-pointer items-center justify-between bg-[#1F4FD7] px-6 py-5 text-white transition-colors hover:bg-[#1238A5] focus:outline-none focus:ring-2 focus:ring-blue-500 max-[419px]:px-5 max-[419px]:py-4"
-              >
-                <span className="text-xs font-medium">
-                  Parler de votre projet
-                </span>
-                <span className="text-[10px] text-white/75 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-white">
-                  →
-                </span>
-              </button>
+                    </a>
+                  );
+                })}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.nav>
+      </motion.header>
     </>
   );
 }

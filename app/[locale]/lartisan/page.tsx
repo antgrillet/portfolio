@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import LartisanPresentationClient from "@/app/lartisan/presentation-client";
+import LartisanPresentationClient from "@/app/[locale]/lartisan/presentation-client";
 
 export const metadata: Metadata = {
   title: "L'Artisan Restaurant | Landing finale",
