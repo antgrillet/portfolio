@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -108,11 +109,20 @@ export function HeroSection({ onContactClick }: HeroSectionProps) {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               style={shouldReduceMotion ? undefined : { y: photoY }}
-              className="relative aspect-[3/4] w-full overflow-hidden rounded-t-[3rem] bg-gradient-to-b from-primary/30 via-primary/50 to-primary/70 sm:rounded-t-[4rem]"
+              className="relative aspect-[3/4] w-full overflow-hidden rounded-t-[3rem] bg-zinc-200 sm:rounded-t-[4rem]"
             >
-              <div className="absolute inset-0 flex items-center justify-center text-lg font-medium uppercase tracking-widest text-white/30">
-                Photo
-              </div>
+              <Image
+                src="/hero-portrait.jpg"
+                alt={t("photoAlt")}
+                fill
+                className="object-cover object-top"
+                sizes="(max-width: 1024px) 100vw, 42vw"
+                priority
+              />
+              <div
+                className="pointer-events-none absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/50 to-primary/70"
+                aria-hidden
+              />
             </motion.div>
 
             {/* Description + CTA overlapping bottom-right of photo */}
