@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { BdpShowcaseHome } from "@/components/showcases/bistrot-du-port/bdp-showcase-home";
 
-const TITLE = "Bistrot du Port — showcase accueil (refonte)";
+const TITLE = "Bistrot du Port — showcase accueil (refonte Next.js)";
 const DESCRIPTION =
-  "Démo portfolio : page d’accueil livrée (Next.js) — restaurant au lac du Bourget, Aix-les-Bains. Site public : bistrot-du-port.fr.";
+  "Démo portfolio : accueil livré (Next.js, Framer Motion, GSAP) — identité Marine Immersif, lac du Bourget, Aix-les-Bains. Site public : bistrot-du-port.fr.";
 
 export const metadata: Metadata = {
   title: TITLE,

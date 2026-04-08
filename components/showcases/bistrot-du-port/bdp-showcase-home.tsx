@@ -1,10 +1,16 @@
-import { HomeBelowFold, Vibe1HeroMainOnly } from "./bdp-site-shell";
+import { BdpHomeAccroche } from "./bdp-home-accroche";
+import { BdpHomeCtas } from "./bdp-home-ctas";
+import { BdpHomeHero } from "./bdp-home-hero";
+import { BdpHomeHoraires } from "./bdp-home-horaires";
 
+/** Accueil livré (vibe Marine Immersif) — même structure que le repo livrable `sonnet`. */
 export function BdpShowcaseHome() {
   return (
-    <div className="flex min-h-0 flex-1 flex-col bg-[#fdfdfd] font-sans text-[#141414] selection:bg-[#e5e5e5] selection:text-black">
-      <Vibe1HeroMainOnly />
-      <HomeBelowFold />
-    </div>
+    <>
+      <BdpHomeHero />
+      <BdpHomeAccroche />
+      <BdpHomeHoraires />
+      <BdpHomeCtas />
+    </>
   );
 }

@@ -1,14 +1,4 @@
-/* Typo du livrable (Geist + Playfair) — scope showcase uniquement */
+/* Showcase Bistrot du Port — scope identité Marine Immersif (livrable sonnet) */
 .bdp-showcase-root {
-  --font-bdp-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-bdp-serif: var(--font-playfair), ui-serif, Georgia, "Times New Roman", serif;
-}
-
-.bdp-showcase-root,
-.bdp-showcase-root .font-sans {
-  font-family: var(--font-bdp-sans);
-}
-
-.bdp-showcase-root .font-serif {
-  font-family: var(--font-bdp-serif);
+  isolation: isolate;
 }
